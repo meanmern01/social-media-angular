@@ -1,0 +1,181 @@
+<div class="row justify-content-center align-items-center">
+
+  <tabset #tabset>
+    <tab tab1 heading="Newest" id="first" #first>
+      <div class="mt-4" *ngFor="let post of postsData ; let i = index">
+        <div *ngIf="postsData.length">
+
+          <div class="d-flex mb-2 align-items-center">
+            <div class="profile-pic text-center"><img
+                src="https://1fid.com/wp-content/uploads/2022/06/cool-profile-picture-2-1024x1024.jpg" alt="profile"
+                class="profile border border-success rounded-circle">
+            </div>
+
+            <div class="d-flex justify-content-center flex-column me-2">
+              <a class="h4"><span title="Like it"><i class="fa-solid fa-angle-up"></i></span></a>
+              <span class="mb-2">24</span>
+              <span>0</span>
+              <a class="h4"><span title="Dislike it"><i class="fa-solid fa-angle-down"></i></span></a>
+            </div>
+            <div class="profile-title d-flex flex-column">
+              <h5 class="">{{post.title}}</h5>
+              <div class="d-flex align-items-center">
+                <span class="me-3">{{post.name}}</span>
+              </div>
+              <div class="d-flex align-items-center">
+                <div class="d-flex align-items-center"><i
+                    class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i>{{post.likesCount}}</div>
+                <span class="me-3 ms-3"><i
+                    class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post.timeStamp | date:
+                  'short'}}</span>
+                <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i>64 comments</span>
+              </div>
+            </div>
+            <div>
+              <button class="btn btn-outline-success rounded-1">Follow</button>
+            </div>
+          </div>
+          <div class="post-image mt-4 d-flex justify-content-center">
+            <img src="https://wallpaperaccess.com/full/327366.jpg" alt="" width="500" height="500"
+              class="rounded object-fit-cover">
+            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
+              <button (click)="like($event, post.postId)" class="like cursor-pointer">
+                <i class="fa-regular text-light fa-heart"></i>
+                <p class="count">{{post.likesCount}}</p>
+              </button>
+
+              <button class="comments cursor-pointer">
+                <i class="h6 mb-0 fa-regular fa-comment"></i>
+                <p class="count">9.5k</p>
+              </button>
+              <div class="share cursor-pointer">
+                <i class="fa-solid fa-share"></i>
+                <p class="count">9.5k</p>
+              </div>
+            </div>
+          </div>
+          <div class="mx-auto" style="width: 536px;">
+            <h2 class="text-center">comments</h2>
+            <div class="row" *ngFor=" let comment of post.comments">
+              <div class="img-fluid">
+                <!-- <img src="{{post.profilepic}}" alt=""> -->
+              </div>
+              <p class="w-100">{{post.name}}</p>
+              <p class="h5">
+                {{ comment.commentText}}
+              </p>
+            </div>
+          </div>
+          <div class="comment-area d-flex justify-content-center mt-5 position-relative">
+            <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
+              #commentField placeholder="Enter comment" required>
+            <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
+              class=" btn btn-success position-absolute send">
+              <i class="fa-regular fa-paper-plane"></i>
+            </button>
+            <button class="btn btn-success position-absolute send" *ngIf="sending">
+              <div class="spinner-border spinner-border-sm text-light" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </button>
+          </div>
+        </div>
+        <!-- <p *ngIf="error" class="text-danger text-center">{{error}}</p> -->
+        <div *ngIf="!postsData.length">
+          <h2>{{message}}</h2>
+        </div>
+      </div>
+    </tab>
+
+    <tab tab2 heading="Trending" id="second" #second>
+      <div class="mt-4" *ngFor="let post of postsData">
+        <div class="d-flex mb-2 align-items-center">
+          <div class="profile-pic text-center"><img
+              src="https://1fid.com/wp-content/uploads/2022/06/cool-profile-picture-2-1024x1024.jpg" alt="profile"
+              class="profile border border-success rounded-circle">
+          </div>
+          <div class="profile-title d-flex flex-column">
+            <h5 class="">11 Marketing Channels That Consisitently Work for Founder</h5>
+            <div class="d-flex align-items-center">
+              <span class="me-3">Zeroturous</span>
+              <span>Growth || hdfgszjdvc</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <a class="text-danger text-decoration-none h5 mb-0"><i class="fa-regular fa-heart"></i></a>
+              <span class="me-3 ms-3"><i class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>13
+                March at 5:16</span>
+              <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i>64 comments</span>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-outline-success rounded-1">Follow</button>
+          </div>
+        </div>
+        <div class="post-image mt-4 d-flex justify-content-center">
+          <img src="https://wallpaperaccess.com/full/327366.jpg" alt="" width="500" height="500"
+            class="rounded object-fit-cover">
+          <div class="post-actions d-flex flex-column justify-content-end align-items-end">
+            <div class="like cursor-pointer">
+              <i class="fa-regular fa-heart"></i>
+              <p class="count">9.5k</p>
+            </div>
+
+            <div class="comments cursor-pointer">
+              <i class="h6 mb-0 fa-regular fa-comment"></i>
+              <p class="count">9.5k</p>
+            </div>
+            <div class="share cursor-pointer">
+              <i class="fa-solid fa-share"></i>
+              <p class="count">9.5k</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tab>
+    <tab tab3 heading="Discover" id="first" #third>
+      <div class="mt-4" *ngFor="let post of postsData">
+        <div class="d-flex mb-2 align-items-center">
+          <div class="profile-pic text-center"><img
+              src="https://1fid.com/wp-content/uploads/2022/06/cool-profile-picture-2-1024x1024.jpg" alt="profile"
+              class="profile border border-success rounded-circle">
+          </div>
+          <div class="profile-title d-flex flex-column">
+            <h5 class="">11 Marketing Channels That Consisitently Work for Founder</h5>
+            <div class="d-flex align-items-center">
+              <span class="me-3">Zeroturous</span>
+              <span>Growth || hdfgszjdvc</span>
+            </div>
+            <div class="d-flex align-items-center">
+              <a class="text-danger text-decoration-none h5 mb-0"><i class="fa-regular fa-heart"></i></a>
+              <span class="me-3 ms-3"><i class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>13
+                March at 5:16</span>
+              <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i>64 comments</span>
+            </div>
+          </div>
+          <div>
+            <button class="btn btn-outline-success rounded-1">Follow</button>
+          </div>
+        </div>
+        <div class="post-image mt-4 d-flex justify-content-center">
+          <img src="https://wallpaperaccess.com/full/327366.jpg" alt="" width="500" height="500"
+            class="rounded object-fit-cover">
+          <div class="post-actions d-flex flex-column justify-content-end align-items-end">
+            <div class="like cursor-pointer">
+              <i class="fa-regular fa-heart"></i>
+              <p class="count">9.5k</p>
+            </div>
+
+            <div class="comments cursor-pointer">
+              <i class="h6 mb-0 fa-regular fa-comment"></i>
+              <p class="count">9.5k</p>
+            </div>
+            <div class="share cursor-pointer">
+              <i class="fa-solid fa-share"></i>
+              <p class="count">9.5k</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </tab>
+  </tabset>
+</div>

@@ -1,0 +1,50 @@
+<div class="context">
+  <div class="container mx-auto">
+    <div class="form-box">
+      <h3 class="mb-4 text-center">Login</h3>
+      <form action="" (submit)="login(email.value, password.value)">
+        <div class="form-floating mb-3">
+          <input type="email" #email class="form-control shadow-none" id="floatingInput" placeholder="name@example.com">
+          <label for="floatingInput">Email address</label>
+          <span class="text-danger">{{emailError}}</span>
+        </div>
+        <div class="form-floating">
+          <input type="password" #password class="form-control shadow-none" id="floatingPassword"
+            placeholder="Password">
+          <label for="floatingPassword">Password</label>
+          <span class="text-danger">{{passwordError}}</span>
+        </div>
+        <input class="btn btn-gradiant" type="submit" value="Sign In" />
+        <p class="h6 mt-4">Don't have an account ? <a routerLink="/signup"
+            class="text-decoration-none text-orange">Signup</a></p>
+        <hr>
+        <button class="loginBtn btn w-100 text-center loginBtn--facebook">
+          Login with Facebook
+        </button>
+
+        <button class="loginBtn btn w-100 text-center loginBtn--google">
+          Login with Google
+        </button>
+
+        <button class="loginBtn btn w-100 text-center loginBtn--twitter twitter-icon"> Login with Twitter</button>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="area">
+  <ul class="circles">
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+    <li></li>
+  </ul>
+</div>

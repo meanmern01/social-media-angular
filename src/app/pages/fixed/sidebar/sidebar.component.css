@@ -1,0 +1,8 @@
+.sidebar {
+  position: static;
+  left: 0;
+}
+a {
+  color: #fff;
+  cursor: pointer;
+}

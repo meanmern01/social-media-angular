@@ -1,0 +1,117 @@
+<div class="container-fluid sidebar">
+  <div class="row flex-nowrap">
+    <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
+      <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
+        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <span class="fs-5 d-none d-sm-inline text-decoration-underline pb-2">Menu</span>
+        </a>
+        <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center text-light align-items-sm-start"
+          id="menu">
+          <li class="nav-item" style="width: 100%; text-align: left;">
+            <a class="nav-link align-middle px-0">
+              <i class="fa-solid fa-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
+            </a>
+          </li>
+          <li>
+            <a data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+              <i class="fa-solid fa-magnifying-glass"></i> <span class="ms-1 d-none d-sm-inline">Search</span> </a>
+          </li>
+          <li>
+            <a href="#" class="nav-link px-0 align-middle">
+              <i class="fa-regular fa-comment-dots"></i> <span class="ms-1 d-none d-sm-inline">Chat</span></a>
+          </li>
+          <li>
+            <a data-bs-toggle="collapse" class="nav-link px-0 align-middle ">
+              <i class="fa-solid fa-bell"></i> <span class="ms-1 d-none d-sm-inline">Notification</span></a>
+          </li>
+          <li>
+            <a data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+              <i class="fa-solid fa-hashtag"></i> <span class="ms-1 d-none d-sm-inline">Trending</span> </a>
+          </li>
+          <li>
+            <a class="nav-link px-0 align-middle">
+              <i class="fa-solid fa-group-arrows-rotate"></i><span class="ms-1 d-none d-sm-inline">Communities</span>
+            </a>
+          </li>
+          <li>
+            <a (click)="setTheme()" *ngIf="light" class="nav-link px-0 align-middle">
+              <i class="fa-solid fa-toggle-off"></i><span class="ms-1 d-none d-sm-inline">Turn Off Light</span> </a>
+            <a (click)="setTheme()" *ngIf="!light" class="nav-link px-0 align-middle">
+              <i class="fa-solid fa-toggle-on"></i><span class="ms-1 d-none d-sm-inline">Turn On Light</span> </a>
+          </li>
+          <li>
+            <a class="nav-link px-0 align-middle">
+              <i class="fa-solid fa-user"></i> <span class="ms-1 d-none d-sm-inline">Profile</span> </a>
+          </li>
+        </ul>
+        <hr>
+      </div>
+    </div>
+    <div class="col-md-7 d-flex justify-content-center py-3">
+      <router-outlet></router-outlet>
+
+    </div>
+    <div class="col-md-3 d-flex justify-content-center py-3">
+      <div>
+        <div class="card shadow h-auto">
+          <div class="card-header bg-transparent">
+            <h4>About Us</h4>
+            <P>Growing businessis hard. This Group is to help you along the journey</P>
+          </div>
+          <div class="card-body">
+            <div class="public w-100 border-bottom">
+              <div class="d-flex justify-content-between align-items-center">
+                <p class=""><i class="fa-solid fa-earth-asia"></i> Public
+                </p>
+                <p class="">1??</p>
+              </div>
+            </div>
+            <div class="visible w-100 border-bottom">
+              <div class="d-flex pt-3 justify-content-between align-items-center">
+                <p class=""><i class="fa-regular fa-eye"></i> Visiable
+                </p>
+                <p class="">1??</p>
+              </div>
+            </div>
+            <div class="member w-100  border-bottom">
+              <div class="d-flex pt-3 justify-content-between align-items-center">
+                <p class=""><i class="fa-solid fa-people-group"></i> Memebers
+                </p>
+                <p class="">1??</p>
+              </div>
+            </div>
+            <div class="cretaed w-100  border-bottom">
+              <div class="d-flex pt-3 justify-content-between align-items-center">
+                <p class=""><i class="fa-regular fa-square-plus"></i> Created
+                </p>
+                <p class="">1??</p>
+              </div>
+            </div>
+            <div class="tags w-100  border-bottom">
+              <div class="d-flex pt-3 justify-content-between align-items-center">
+                <p class=""><i class="fa-solid fa-tags"></i> Tags
+                </p>
+                <p class="">1??</p>
+              </div>
+            </div>
+            <div class="moderated w-100">
+              <div class="d-flex pt-3 justify-content-between align-items-center">
+                <p class="">Modertedby csallen, roisesherry, channigallen
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <h4>Resources</h4>
+        <div class="card shadow pb-3 mb-4" style="width: 22rem;" *ngFor="let resource of resourceData">
+          <img class="card-img-top rounded-bottom-pill" src="https://wallpaperaccess.com/full/625102.png"
+            alt="Card image cap">
+          <div class="card-body">
+            <h5 class="card-title">Marketing Channels that consistently work for founder.</h5>
+            <p class="card-text">I’ve anlayzed all 479 founder interview on indie Hackers & uncoverd the mar......</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

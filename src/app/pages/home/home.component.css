@@ -1,0 +1,76 @@
+:root {
+  --btn-border: 1px solid black;
+  --color-white: white;
+  --color-black: black;
+}
+.profile {
+  max-width: 58%;
+}
+.profile-pic {
+  width: 15%;
+}
+.profile-title {
+  width: 55%;
+}
+.like,
+.comments,
+.share {
+  width: 40px;
+  height: 40px;
+  border: var(--btn-border);
+  background: rgba(46, 125, 50, 0.1);
+  text-align: center;
+  border-radius: 50%;
+  margin-bottom: 40px;
+  color: var(--color-black);
+  margin-left: 10px;
+  font-size: 16px;
+  line-height: 40px;
+}
+.count {
+  margin-top: -10px;
+  color: var(--color-black);
+}
+.cursor-pointer {
+  cursor: pointer;
+}
+.modal-heading {
+  height: 30px;
+  color: #000;
+  margin: 5px 0px 10px 0px;
+  border-bottom: var(--btn-border);
+}
+.nav-item {
+  width: 33.33%;
+  text-align: center;
+}
+.nav-tabs .nav-link {
+  background-color: transparent;
+  color: var(--color-black);
+  font-size: 12px;
+}
+.nav-tabs .nav-link:hover {
+  border: 0px transparent;
+  color: var(--color-white) !important;
+  background-color: green;
+}
+
+.nav-tabs .nav-link.active {
+  border-bottom: var(--btn-border);
+  color: var(--color-black);
+  font-size: 12px;
+}
+.nav-tabs .nav-link.active:hover {
+  border-color: transparent;
+}
+.comment-area input.form-control {
+  color: #212121;
+}
+.send {
+  right: 25%;
+}
+[data-bs-theme="dark"] {
+  --btn-border: 1px solid white;
+  --color-white: black;
+  --color-black: white;
+}

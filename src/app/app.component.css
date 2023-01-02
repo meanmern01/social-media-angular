@@ -1,0 +1,7 @@
+::ng-deep .custom-class {
+  background-color: red;
+  color: white;
+}
+.mat-mdc-snack-bar-container {
+  --mdc-snackbar-container-color: red;
+}
