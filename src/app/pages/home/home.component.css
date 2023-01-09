@@ -74,3 +74,42 @@
   --color-white: black;
   --color-black: white;
 }
+.like i.fa-regular {
+  color: var(--color-black);
+}
+.scroll {
+  scrollbar-color: var(--scroll-thumb-color, grey)
+    var(--scroll-track, transparent);
+  scrollbar-width: thin;
+}
+.scroll::-webkit-scrollbar {
+  width: var(--scroll-size, 10px);
+  height: var(--scroll-size, 10px);
+}
+.scroll::-webkit-scrollbar-track {
+  background-color: var(--scroll-track, transparent);
+  border-radius: var(--scroll-track-radius, var(--scroll-radius));
+}
+.scroll::-webkit-scrollbar-thumb {
+  background-color: var(--scroll-thumb-color, grey);
+  background-image: var(--scroll-thumb, none);
+  border-radius: var(--scroll-thumb-radius, var(--scroll-radius));
+}
+.scroll-3 {
+  --scroll-size: 5px;
+  --scroll-radius: 10px;
+  --scroll-track: rgb(255 255 255 / 10%);
+  --scroll-thumb-color: #fff;
+}
+.comments-view {
+  width: 536px;
+  overflow-x: hidden;
+  height: 141px;
+  --scroll-size: 5px;
+  --scroll-radius: 10px;
+  --scroll-track: rgb(255 255 255 / 10%);
+  --scroll-thumb-color: #fff;
+}
+video::-webkit-media-controls-fullscreen-button {
+  display: none;
+}

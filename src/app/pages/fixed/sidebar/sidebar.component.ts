@@ -1,5 +1,6 @@
-// @ts-nocheck
-import { Component } from '@angular/core';
+import { filter } from 'rxjs';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,13 +8,31 @@ import { Component } from '@angular/core';
   styleUrls: ['./sidebar.component.css']
 })
 export class SidebarComponent implements OnInit {
-  light: Boolean;
+  light!: any;
   resourceData: any[] = [1, 2, 3, 4];
-  ngOnInit(): void {
-    this.light = JSON.parse(localStorage.getItem('theme'));
-    console.log('theme', typeof this.light);
-    document.getElementById("body").setAttribute("data-bs-theme", this.light ? "light" : "dark");
+  url!: string;
+  show!: boolean;
 
+  constructor(private route: Router) {
+    route.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      if (event.url === '/chat' || event.url === '/trending' || event.url === '/search' || event.url === '/profile') {
+        this.show = true;
+      } else {
+        this.show = false;
+      }
+    });
+  }
+  ngOnInit(): void {
+    this.light = localStorage.getItem('theme') || '';
+    if (this.light === 'true') {
+      this.light = true;
+    } else {
+      this.light = false;
+    }
+    document?.getElementById("body")?.setAttribute("data-bs-theme", this.light ? "light" : "dark");
+    // this.checkRoute()
   }
   sidebar() {
     window.addEventListener('DOMContentLoaded', event => {
@@ -27,7 +46,7 @@ export class SidebarComponent implements OnInit {
         sidebarToggle.addEventListener('click', event => {
           event.preventDefault();
           document.body.classList.toggle('sb-sidenav-toggled');
-          localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+          localStorage.setItem('sb|sidebar-toggle', JSON.stringify(document.body.classList.contains('sb-sidenav-toggled')));
         });
       }
 
@@ -35,9 +54,17 @@ export class SidebarComponent implements OnInit {
   }
   setTheme() {
     this.light = !this.light
-    console.log(this.light)
-    localStorage.setItem('theme', this.light)
-    document.getElementById("body").setAttribute("data-bs-theme", this.light ? "light" : "dark");
+    localStorage.setItem('theme', JSON.stringify(this.light))
+    document.getElementById("body")?.setAttribute("data-bs-theme", this.light ? "light" : "dark");
   }
-
+  isHome(): any {
+    this.route.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      if (event.url === '/home') {
+        return true
+      }
+      return false
+    });
+  }
 }

@@ -22,6 +22,7 @@ import { NgxEmojiPickerModule } from 'ngx-emoji-picker';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { ChatComponent } from './pages/chat/chat.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,6 +32,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     HeaderComponent,
     FooterComponent,
     SidebarComponent,
+    ChatComponent,
   ],
   imports: [
     BrowserModule,

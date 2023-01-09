@@ -26,7 +26,7 @@ textarea {
   width: 100%;
 }
 .btn-gradiant {
-  background: -webkit-linear-gradient(180deg, #fcb94f, #f3a250, #e37653);
+  background: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
   margin-top: 20px;
   color: white;
 }
@@ -128,8 +128,8 @@ input::-webkit-inner-spin-button {
 }
 
 .area {
-  background: #f3a250;
-  background: -webkit-linear-gradient(#fcb94f, #f3a250, #e37653);
+  background: #3cba92;
+  background: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
   width: 100%;
   height: 100vh;
 }

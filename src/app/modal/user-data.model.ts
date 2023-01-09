@@ -4,6 +4,7 @@ export interface userData {
   description?: string;
   location?: string;
   id?: string;
+  uid: string;
   photoUrl?: string;
   phoneNumber: string;
   userAvatar?: string;
@@ -22,10 +23,24 @@ export interface post {
   phoneNumber: String;
   email: String;
   uid: String;
+  imageUrl?: string;
+  format?: string
+  followers: Array<any>;
+  likes?: any;
 }
 
 export interface comment {
   userId: string;
   commentText: string;
   time: any;
+}
+
+
+export interface chat {
+  senderId: any;
+  senderName: any;
+  reciverId: any;
+  reciverName: any;
+  message: any;
+  uid: string;
 }

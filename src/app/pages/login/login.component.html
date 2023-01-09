@@ -15,20 +15,20 @@
           <span class="text-danger">{{passwordError}}</span>
         </div>
         <input class="btn btn-gradiant" type="submit" value="Sign In" />
-        <p class="h6 mt-4">Don't have an account ? <a routerLink="/signup"
-            class="text-decoration-none text-orange">Signup</a></p>
+        <p class="h6 mt-4 text-black">Don't have an account ? <a routerLink="/signup"
+            class="text-decoration-none text-success">Signup</a></p>
         <hr>
-        <button class="loginBtn btn w-100 text-center loginBtn--facebook">
-          Login with Facebook
-        </button>
-
-        <button class="loginBtn btn w-100 text-center loginBtn--google">
-          Login with Google
-        </button>
-
-        <button class="loginBtn btn w-100 text-center loginBtn--twitter twitter-icon"> Login with Twitter</button>
 
       </form>
+      <button class="loginBtn btn w-100 text-center loginBtn--facebook">
+        Login with Facebook
+      </button>
+
+      <button (click)="loginWithGoogle()" class="loginBtn btn w-100 text-center loginBtn--google">
+        Login with Google
+      </button>
+
+      <button class="loginBtn btn w-100 text-center loginBtn--twitter twitter-icon"> Login with Twitter</button>
     </div>
   </div>
 </div>

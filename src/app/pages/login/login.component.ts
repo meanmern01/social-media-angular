@@ -32,12 +32,13 @@ export class LoginComponent {
       this.passwordError = formatter?.password?._errors[0] || '';
       console.log(this.passwordError, this.emailError)
     } else {
-      console.log("You made it")
       this.emailError = '';
       this.passwordError = '';
       this.auth.SignIn(email, password)
     }
     return false
   }
-
+  loginWithGoogle() {
+    this.auth.GoogleAuth()
+  }
 }

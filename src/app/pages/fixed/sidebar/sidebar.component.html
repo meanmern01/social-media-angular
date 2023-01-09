@@ -2,13 +2,13 @@
   <div class="row flex-nowrap">
     <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
       <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-        <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <a class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
           <span class="fs-5 d-none d-sm-inline text-decoration-underline pb-2">Menu</span>
         </a>
         <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center text-light align-items-sm-start"
           id="menu">
           <li class="nav-item" style="width: 100%; text-align: left;">
-            <a class="nav-link align-middle px-0">
+            <a routerLink="/" class="nav-link align-middle px-0">
               <i class="fa-solid fa-house"></i> <span class="ms-1 d-none d-sm-inline">Home</span>
             </a>
           </li>
@@ -17,7 +17,7 @@
               <i class="fa-solid fa-magnifying-glass"></i> <span class="ms-1 d-none d-sm-inline">Search</span> </a>
           </li>
           <li>
-            <a href="#" class="nav-link px-0 align-middle">
+            <a routerLink="/chat" class="nav-link px-0 align-middle">
               <i class="fa-regular fa-comment-dots"></i> <span class="ms-1 d-none d-sm-inline">Chat</span></a>
           </li>
           <li>
@@ -47,11 +47,10 @@
         <hr>
       </div>
     </div>
-    <div class="col-md-7 d-flex justify-content-center py-3">
+    <div class="py-3" [ngClass]="isHome()? 'd-flex justify-content-center col-md-7':'col-md-10'">
       <router-outlet></router-outlet>
-
     </div>
-    <div class="col-md-3 d-flex justify-content-center py-3">
+    <div class="col-md-3 d-flex justify-content-center py-3" *ngIf="!show">
       <div>
         <div class="card shadow h-auto">
           <div class="card-header bg-transparent">

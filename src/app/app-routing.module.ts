@@ -1,3 +1,4 @@
+import { ChatComponent } from './pages/chat/chat.component';
 import { LoginGuard } from './shared/login.guard';
 import { HomeComponent } from './pages/home/home.component';
 import { SignupComponent } from './pages/signup/signup.component';
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: 'home',
     component: HomeComponent,
+  },
+  {
+    path: 'chat',
+    component: ChatComponent,
   }
 ];
 

@@ -3,6 +3,7 @@ import { userData } from './../../modal/user-data.model';
 import { DatabaseService } from './../../services/database.service';
 import { Component } from '@angular/core';
 import { z } from 'zod'
+import * as Notiflix from 'notiflix'
 const signupSchema = z.object({
   name: z.string({
     required_error: "Name is required"
@@ -10,7 +11,7 @@ const signupSchema = z.object({
   email: z.string({
     required_error: "Email is required",
   }).min(10, { message: "Email is required" }).email({ message: 'Please Enter a valid email address' }),
-  phoneNumber: z.string().min(10, { message: "Please enter a phone number" }).length(10, { message: "Must be 5 or more characters long" }),
+  phoneNumber: z.string().min(10, { message: "Please enter a phone number" }).length(10, { message: "Must be 10 characters long" }),
   password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
   cpassword: z.string().min(8, { message: "Confirm Password must be at least 8 characters long" }),
 }).strict()

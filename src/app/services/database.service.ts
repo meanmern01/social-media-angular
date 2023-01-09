@@ -1,4 +1,4 @@
-import { userData, post, comment } from './../modal/user-data.model';
+import { userData, post, comment, chat } from './../modal/user-data.model';
 import {
   AngularFirestore,
   AngularFirestoreCollection,
@@ -6,9 +6,12 @@ import {
 } from '@angular/fire/compat/firestore';
 import * as firebase from 'firebase/app';
 import { Injectable } from '@angular/core';
-import { Observable, from, combineLatest, map, filter } from 'rxjs';
+import { Observable, from, combineLatest, map, filter, finalize, catchError, throwError, tap, of } from 'rxjs';
 import { BehaviorSubject } from 'rxjs';
 import { arrayUnion, increment } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { arrayRemove, DocumentSnapshot, QuerySnapshot, serverTimestamp } from 'firebase/firestore';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,50 +22,44 @@ export class DatabaseService {
   userData$: Observable<userData[]>;
   postData$!: Observable<any[]>;
   postLikeData$!: Observable<any[]>;
-
-  constructor(private afs: AngularFirestore) {
+  private basePath = 'post/images'
+  downloadURL: any;
+  error!: void;
+  chatCollection: AngularFirestoreCollection<chat>;
+  subscription: any;
+  constructor(private afs: AngularFirestore, private fireStorage: AngularFireStorage) {
     this.userDatasCollection = afs.collection<userData>('users');
     this.postDatasCollection = afs.collection<any>('posts');
+    this.chatCollection = afs.collection<chat>('chat');
     this.userData$ = this.userDatasCollection.valueChanges();
   }
-
-  addUserData(userData: userData): Observable<DocumentReference> {
-    return from(this.userDatasCollection.add(userData));
+  //adds the user data to the database
+  addUserData({ userData }: { userData: userData; }): any {
+    return from((this.userDatasCollection.doc(userData.uid).set(userData)))
   }
-
-  updateUserData(userData: userData): Observable<void> {
+  //Update user data from database
+  updateUserData({ userData }: { userData: userData; }): Observable<void> {
     return from(
       this.afs.doc<userData>(`users/${userData.id}`).update({
       }),
     );
   }
-
-  DeleteUserData() {
+  //Delete a user
+  DeleteUserData(): void {
 
   }
-
-
+  //get all users
+  getAllUsers() {
+    return from(this.userDatasCollection.valueChanges())
+  }
   // Add Post
-  addPost(postData: any): Observable<DocumentReference> {
+  addPost({ postData }: { postData: any; }): Observable<DocumentReference> {
     console.log("Uploading post...");
     let uid = this.afs.createId()
     return from(this.postDatasCollection.add({ ...postData, timeStamp: +new Date(), uid: uid }))
   }
-
   //Get Post
-  getPosts() {
-    // const posts = this.postDatasCollection.valueChanges()
-    // console.log(posts.subscribe((res: any) => { console.log(res) }))
-    // const user = this.userDatasCollection.valueChanges()
-
-    // const combinedList = combineLatest<any[]>(posts, user).pipe(
-    //   map(arr => arr.reduce(function (acc, cur) {
-    //     let result: any = []
-    //     acc.filter((x: any, i: number) => result.push({ ...x, ...cur.filter((e: any) => e.uid == x.postAuthorId)[0] }))
-    //     return result
-    //   }
-    //   ))
-    // )
+  getPosts(): Observable<any> {
     const user = this.afs.collection('users').snapshotChanges().pipe(
       map(uactions => {
         return uactions.map(userAction => {
@@ -85,35 +82,39 @@ export class DatabaseService {
 
     const combinedList = combineLatest<any[]>(posts, user).pipe(
       map(arr => arr.reduce(function (acc, cur) {
-        console.log('data', acc, cur)
         let result: any = []
         acc.filter((x: any, i: number) => result.push({ ...x, ...cur.filter((e: any) => e?.uid == x?.postAuthorId)[0] }))
         return result
       }
       )))
-    console.log(combinedList.subscribe(x => console.log(x)));
+    const commentCombinedList = combineLatest<any[]>(combinedList, user).pipe(
+      map(arr => arr.reduce(function (acc, cur) {
 
-    return combinedList;
+        let result: any = []
+        acc.filter((x: any, i: number) => result.push({
+          ...x, comments: x?.comments?.filter((e: any) => {
+            return e.user = cur.filter((a: any) => a?.uid == e.userId)[0]
+          })
+        }))
+        return result
+      }
+      )
+      )
+    )
+
+    return commentCombinedList;
   }
-
-
-  //Get Post Author User Data
-  getPostAuthor() {
-    return this.userDatasCollection.valueChanges();
-  }
-
-
   //update like count
-  updateLikeCount(id: string, likes: any, type: any) {
+  updateLikeCount({ id, likes, type }: { id: string; likes: any; type: any; }): Observable<void> {
+
     return from(this.afs.collection('posts/').doc(id).update({ likesCount: type === 'inc' ? increment(1) : increment(-1), likes: likes }))
   }
-
-  checkAlreadyLikes(id: string) {
+  //checks that the user has already liked this post
+  checkAlreadyLikes({ id }: { id: string; }): Observable<unknown> {
     return from(this.afs.collection('posts/').doc(id).valueChanges())
   }
-
-  addComment(id: any, comment: string, postId: string) {
-    console.log(id, comment);
+  //adds a comment
+  addComment({ id, comment, postId }: { id: any; comment: string; postId: string; }): Observable<void> {
     let commentData: comment = {
       userId: id,
       commentText: comment,
@@ -122,7 +123,138 @@ export class DatabaseService {
 
     return from(this.afs.collection('posts').doc(postId).update({ comments: arrayUnion(commentData) }))
   }
-  getComments() {
-    return from(this.afs.collection('posts').valueChanges())
+  //Upload Images / Videos to storage
+  pushFileToStorage(image?: any): Observable<unknown> {
+    if (image) {
+      if (image.type === 'image/png' || image.type === 'image/jpeg' || image.type === 'image/jpg' || image.type === 'image/gif') {
+        let rendomNum = Math.floor(Math.random() * 100000).toString();
+        let fileObject = {
+          file: image,
+          name: rendomNum
+        };
+        const filePath = `/${this.basePath}/${new Date().getTime()}${fileObject.file.name}`;
+        const storageRef = this.fireStorage.ref(filePath);
+        const uploadTask = this.fireStorage.upload(filePath, fileObject.file);
+
+        return new Observable((observer) => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              storageRef.getDownloadURL().subscribe((downloadURL: any) => {
+                // Emit the download URL and complete the observable
+                observer.next(downloadURL);
+                image.name = fileObject.name;
+                observer.complete();
+              });
+            }),
+            catchError((err: any) => {
+              return of(err);
+            })
+          ).subscribe();
+        });
+      } else if (image.type === 'video/mp4' || image.type === 'video/MOV' || image.type === 'video/webm' || image.type === 'video/MKV' || image.type === 'video/AVI') {
+        let rendomNum = Math.floor(Math.random() * 100000).toString();
+        let fileObject = {
+          file: image,
+          name: rendomNum
+        };
+        const filePath = `/post/video/${new Date().getTime()}${fileObject.file.name}`;
+        const storageRef = this.fireStorage.ref(filePath);
+        const uploadTask = this.fireStorage.upload(filePath, fileObject.file);
+
+        return new Observable((observer) => {
+          uploadTask.snapshotChanges().pipe(
+            finalize(() => {
+              storageRef.getDownloadURL().subscribe((downloadURL: any) => {
+                // Emit the download URL and complete the observable
+                observer.next(downloadURL);
+                image.name = fileObject.name;
+                observer.complete();
+              });
+            }),
+            catchError((err: any) => {
+              return of(err);
+            })
+          ).subscribe();
+        });
+      } else {
+        return new Observable((observer) => {
+          observer.next('No file specified');
+        });
+      }
+    }
+    return new Observable((observer) => {
+      observer.next('No file specified');
+    });
+  }
+  //get most liked posts from the database
+  trendingPosts(): Observable<any> {
+    const user = this.afs.collection('users').snapshotChanges().pipe(
+      map(uactions => {
+        return uactions.map(userAction => {
+          const uData = userAction.payload.doc.data() as any;
+          return uData
+
+
+        })
+
+      })
+    )
+    const posts = this.afs.collection('posts', ref => ref.orderBy('likesCount', 'desc')).snapshotChanges().pipe(
+      map(pactions => {
+        return pactions.map(postAction => {
+          const pData = postAction.payload.doc.data() as any;
+          console.log(pData);
+
+          return { ...pData, postId: postAction.payload.doc.id }
+        })
+      })
+    );
+
+    const combinedList = combineLatest<any[]>(posts, user).pipe(
+      map(arr => arr.reduce(function (acc, cur) {
+        let result: any = []
+        acc.filter((x: any, i: number) => result.push({ ...x, ...cur.filter((e: any) => e?.uid == x?.postAuthorId)[0] }))
+        console.log(result)
+        return result
+      }
+      )))
+    console.log(combinedList);
+
+    return combinedList;
+  }
+  //Add a followers to the database
+  follow(postAuthorId: any, id: any) {
+    return from(this.afs.collection('users').doc(postAuthorId).update({ followers: arrayUnion(id) }))
+  }
+  checkFollowing(uid: any) {
+    return from(this.afs.collection('users').doc(uid).valueChanges().pipe(
+      map((followers: any) => {
+        followers.followers.includes(uid);
+      })
+    ))
+  }
+  unfollow(postAuthorId: any, id: any) {
+    return from(this.afs.collection('users').doc(postAuthorId).update({ followers: arrayRemove(id) }))
+  }
+
+
+  //send Message
+  sendMessage(message: chat) {
+    console.log("Sending message", message);
+    return from(this.afs.collection('/chats').add(message))
+  }
+  //get message
+  getMessages(uid: any): Observable<any> {
+    const query = this.afs.collection('/chats').ref.where('uid', '==', uid).orderBy('timestemp', 'desc');
+
+    return new Observable((observer) => {
+      this.subscription = query.onSnapshot((snapshot) => {
+        const messages = snapshot.docs.map(doc => doc.data());
+        observer.next(messages);
+      });
+    });
+  }
+  getUserData(token: string) {
+    return from(this.afs.collection('users').doc(token).valueChanges())
   }
 }

@@ -1,0 +1,53 @@
+<!-- chat.component.html -->
+<div class="container-fluid h-100">
+  <div class="row h-100">
+    <div class="h-100 border-end overflow-auto" [ngClass]="isSelected ? 'col-md-4':'col-md-12'">
+      <!-- List of online users or chat rooms -->
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item list-group-item-action d-flex align-items-center" *ngFor="let user of allUsers"
+          (click)="showMessages(user.uid, user.name)">
+          <img src="https://via.placeholder.com/50x50" class="rounded-circle me-2" alt="Profile picture">
+          <div class="w-100">
+            <h4 class="m-0">{{user.name}}</h4>
+            <p class="text-muted m-0">{{''}}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8 h-50" *ngIf="isSelected">
+      <div class="h-25 bg-light d-flex p-3">
+        <div class="img-fluid me-2">
+          <img src="" alt="" width="50" height="50">
+        </div>
+        <div class="reciver-detailes">
+          <h2 class="text-dark">{{reciver_Name}}</h2>
+        </div>
+      </div>
+      <!-- Chat messages -->
+      <div class="messages d-flex flex-column-reverse">
+        <div class="d-flex flex-column-reverse px-3" *ngFor="let message of messages">
+          <div class="" *ngIf="messages.length != 0">
+            <div class="" [ngClass]="message.senderId == sender_Id ? 'text-end':'text-start'">
+              <h5 class="">{{ message.senderName }}</h5>
+              <h3 class="message">{{ message.message }}</h3>
+            </div>
+          </div>
+        </div>
+        <div class="text-center" *ngIf="!messages || messages.length === 0">
+          <p>No Messages</p>
+        </div>
+      </div>
+      <!-- Message input form -->
+      <div *ngIf="isSelected" class="position-relative">
+        <form>
+          <div class="form-group w-75">
+            <input type="text" class="form-control" #sendMessageText
+              (keypress.Enter)="sendMessage(sendMessageText.value)" placeholder="Enter message">
+          </div>
+          <button (click)="sendMessage(sendMessageText.value)" type="submit"
+            class="btn w-25 btn-primary px-3 float-right">Send</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
