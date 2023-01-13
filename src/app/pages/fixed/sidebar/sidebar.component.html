@@ -40,14 +40,14 @@
               <i class="fa-solid fa-toggle-on"></i><span class="ms-1 d-none d-sm-inline">Turn On Light</span> </a>
           </li>
           <li>
-            <a class="nav-link px-0 align-middle">
+            <a class="nav-link px-0 align-middle" routerLink="/profile">
               <i class="fa-solid fa-user"></i> <span class="ms-1 d-none d-sm-inline">Profile</span> </a>
           </li>
         </ul>
         <hr>
       </div>
     </div>
-    <div class="py-3" [ngClass]="isHome()? 'd-flex justify-content-center col-md-7':'col-md-10'">
+    <div [ngClass]="isHome() || show? 'col-md-10 py-0':'col-md-7 py-3'">
       <router-outlet></router-outlet>
     </div>
     <div class="col-md-3 d-flex justify-content-center py-3" *ngIf="!show">
@@ -103,7 +103,7 @@
 
         </div>
         <h4>Resources</h4>
-        <div class="card shadow pb-3 mb-4" style="width: 22rem;" *ngFor="let resource of resourceData">
+        <div class="card shadow pb-3 mb-4" style="width: 22rem;" *ngFor="let resource of resourceData.value">
           <img class="card-img-top rounded-bottom-pill" src="https://wallpaperaccess.com/full/625102.png"
             alt="Card image cap">
           <div class="card-body">

@@ -1,0 +1,219 @@
+<div class="container pb-3">
+  <div class="row">
+    <!-- Profile Pic -->
+    <div class="profile-back mb-2"
+      style="background-image: url({{userData.coverImage}}); background-position: center center; background-size: cover ; background-repeat: no-repeat;">
+      <input type="file" class="visually-hidden" name="cover" #cover id="cover" (change)="coverUpload(cover.files)">
+      <a (click)="profile.click() ; ">
+        <input type="file" name="profile" id="profile" (change)="profileUpload(profile.files)" #profile
+          class="visually-hidden">
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
+          class="profile-pic" *ngIf="!userData.profileImage" alt="">
+        <img src="{{userData.profileImage}}" *ngIf="userData.profileImage" alt="" class="profile-pic"
+          style="cursor: pointer;">
+      </a>
+      <button (click)="cover.click()" class="edit-btn btn btn-light"><span><i class="fa-solid fa-camera me-2">
+          </i>Edit Cover Photo</span></button>
+    </div>
+    <div class="user-details col-6 pt-5">
+      <h2>{{userData.name}}</h2>
+      <h4 class="fw-light"><span class="fw-bolder">Bio : </span>{{userData.bio}}</h4>
+      <h4 class="fw-light"><span class="fw-bolder">Location : </span>{{userData.location}}</h4>
+      <h4 class="fw-light"><span class="fw-bolder">Age :</span>{{userData.age}}</h4>
+      <h4 class="fw-light"><span class="fw-bolder">Website Link : </span><a class="text-light text-decoration-none ms-1"
+          href="{{userData.url}}">{{userData.url}}</a></h4>
+    </div>
+    <div class="col-6 text-end pt-3 pe-3">
+      <!-- <------------------------------------------< Edit Profile >------------------------------------------>
+      <ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+          <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+        </div>
+        <div class="modal-body">
+          <form [formGroup]="editProfile" (submit)="updateProfile()">
+            <div class="mb-3">
+              <label for="name">Name :</label>
+              <input type="text" formControlName="name" class="form-control" name="name" id="name" />
+              <div *ngIf="name?.invalid && name?.touched" class="text-danger">
+                <div *ngIf="name?.errors?.['required']">
+                  Name is required
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="bio">Bio :</label>
+              <textarea type="text" formControlName="bio" class="form-control" name="bio" id="bio"></textarea>
+              <div *ngIf="bio?.invalid && bio?.touched">
+                <div *ngIf="bio?.errors?.['required']">
+                  Bio is required
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="phone">Phone Number :</label>
+              <input type="number" formControlName="phone" class="form-control" name="phone" id="phone" />
+              <div *ngIf="phone?.invalid && phone?.touched" class="text-danger">
+                <div *ngIf="phone?.errors?.['required']">
+                  Phone Number is required
+                </div>
+                <div *ngIf="phone?.errors?.['minLength']">
+                  Phone Number must be 10 characters long
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="location">Location :</label>
+              <input type="text" formControlName="location" class="form-control" name="location" id="location" />
+            </div>
+            <div class="mb-3">
+              <label for="age">Age :</label>
+              <input type="number" formControlName="age" class="form-control" name="age" id="age" />
+              <div *ngIf="age?.invalid && age?.touched" class="text-danger">
+                <div *ngIf="age?.errors?.['required']">
+                  Age is required
+                </div>
+                <div *ngIf="age?.errors?.['max']">
+                  Age Is Between 15 to 100
+                </div>
+                <div *ngIf="age?.errors?.['min']">
+                  Age Must Be between 15 and 100
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="url">Website :</label>
+              <input type="url" formControlName="url" class="form-control" name="url" id="url" />
+            </div>
+            <button type="submit" (click)="modal.dismiss('Save Button')" class="btn btn-success me-2">Save</button>
+            <button type="reset" (click)="modal.dismiss('Cancle Button')" class="btn btn-danger">cancel</button>
+          </form>
+        </div>
+
+      </ng-template>
+      <button (click)="open(content)" class="btn btn-success"><i class="fa-solid fa-pen-to-square"></i> Edit
+        Profile</button>
+    </div>
+    <div class="border rounded">
+      <ul ngbNav #nav="ngbNav" class="nav-tabs">
+        <li [ngbNavItem]="1">
+          <a ngbNavLink>Scrolls</a>
+          <ng-template ngbNavContent>
+            <div class="border-bottom mb-2" *ngFor="let scroll of scrollData">
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="col-6 d-flex ">
+                  <img src="" alt="" width="50" height="50">
+                  <div class="d-flex align-items-start flex-column ms-2">
+                    <span class="h4 d-inline-block">Joseph Jack</span>
+                    <span class="d-inline-block">1 Jan, 2019</span>
+                  </div>
+                </div>
+                <div class="col-6 d-flex justify-content-end">
+                  <a href="#" class="text-light text-decoration-none mx-3"><i class="fa-solid fa-thumbtack"></i></a>
+                  <a href="#" class="text-light text-decoration-none mx-3"><i
+                      class="fa-solid fa-ellipsis-vertical"></i></a>
+                </div>
+              </div>
+              <div class="mx-auto col-11">
+                <p>
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard
+                  dummy text ever since the 1500s, when an unknown printer took a galley Lorem Ipsum is simply dummy
+                  text
+                  of
+                  the printing
+                  and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+                  1500s,
+                  when an unknown
+                  printer took a galley.
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                  industry's standard
+                  dummy text ever since the 1500s, when an unknown printer took a galley Lorem Ipsum is simply dummy
+                  text
+                  of
+                  the printing
+                  and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
+                  1500s,
+                  when an unknown
+                  printer took a galley
+                </p>
+              </div>
+
+              <hr class="m-0">
+              <div class="d-flex p-2 text-center">
+                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
+                    class="fa-regular fa-thumbs-up"></i> Like</a>
+                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
+                    class="fa-solid fa-comment"></i> Comments</a>
+                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
+                    class="fa-regular fa-thumbs-down"></i> Dislike</a>
+                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
+                    class="fa-solid fa-repeat"></i>
+                  Respost</a>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="2">
+          <a ngbNavLink>Groups</a>
+          <ng-template ngbNavContent>
+            <h2>Groups you’ve joined</h2>
+            <swiper [loop]="true" [autoHeight]="true" [allowTouchMove]="false"
+              [autoplay]="{ delay: 1000, disableOnInteraction: false }" [navigation]="true"
+              [config]="slidesPerPageConfig">
+              <!-- Auto Mobile -->
+              <ng-template data-swiper-autoplay="6000" swiperSlide *ngFor="let data of joindGroup">
+                <div class="card" style="width: 18rem;">
+                  <img class="card-img-top" height="178" src="{{data.image}}" alt="Card image cap">
+                  <div class="card-body">
+                    <h4 class="card-title text-light">{{data.title}}</h4>
+                    <p class="card-text">{{data.members}}</p>
+                    <a href="{{data.url}}" class="btn w-100 btn-success">View Group</a>
+                  </div>
+                </div>
+              </ng-template>
+            </swiper>
+            <hr>
+            <h2>Suggested Groups</h2>
+            <p class="mb-2">Groups you might be interested in</p>
+            <swiper [loop]="true" [autoHeight]="true" [allowTouchMove]="false"
+              [autoplay]="{ delay: 1000, disableOnInteraction: false }" [navigation]="true"
+              [config]="slidesPerPageConfig">
+              <!-- Auto Mobile -->
+              <ng-template data-swiper-autoplay="6000" swiperSlide *ngFor="let data of joindGroup">
+                <div class="card mb-2" style="width: 18rem;">
+                  <img class="card-img-top" height="178" src="{{data.image}}" alt="Card image cap">
+                  <div class="card-body">
+                    <h4 class="card-title text-light">{{data.title}}</h4>
+                    <p class="card-text">{{data.members}}</p>
+                    <a href="{{data.url}}" class="btn w-100 btn-success">View Group</a>
+                  </div>
+                </div>
+              </ng-template>
+            </swiper>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="3">
+          <a ngbNavLink>Photos</a>
+          <ng-template ngbNavContent>
+            <div class="d-flex flex-wrap" *ngFor="let photo of filterdPost">
+              <img src="{{photo.imageUrl}}" alt="" *ngIf="photo.format === 'image'">
+            </div>
+          </ng-template>
+        </li>
+        <li [ngbNavItem]="4">
+          <a ngbNavLink>Video</a>
+          <ng-template ngbNavContent>
+            <div class="d-flex flex-wrap" *ngFor="let video of filterdPost">
+              <video src="{{video.imageUrl}}" width="226" controls loop alt="" *ngIf="video.format === 'video'"></video>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+
+    </div>
+  </div>
+</div>

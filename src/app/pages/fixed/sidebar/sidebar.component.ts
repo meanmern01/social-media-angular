@@ -1,3 +1,4 @@
+import { DatabaseService } from './../../../services/database.service';
 import { filter } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
@@ -9,11 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidebarComponent implements OnInit {
   light!: any;
-  resourceData: any[] = [1, 2, 3, 4];
+  resourceData: any = [];
   url!: string;
   show!: boolean;
 
-  constructor(private route: Router) {
+  constructor(private route: Router, private db: DatabaseService) {
     route.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
@@ -33,6 +34,7 @@ export class SidebarComponent implements OnInit {
     }
     document?.getElementById("body")?.setAttribute("data-bs-theme", this.light ? "light" : "dark");
     // this.checkRoute()
+    this.getResources()
   }
   sidebar() {
     window.addEventListener('DOMContentLoaded', event => {
@@ -66,5 +68,12 @@ export class SidebarComponent implements OnInit {
       }
       return false
     });
+  }
+  getResources() {
+    this.db.getNews().subscribe((res: any) => {
+      this.resourceData = res;
+      console.log(this.resourceData);
+
+    })
   }
 }

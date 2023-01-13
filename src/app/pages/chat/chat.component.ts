@@ -27,8 +27,6 @@ export class ChatComponent implements OnInit {
     this.showUsers()
     this.showMessages(this.reciver_Id, this.reciver_Name)
     this.isSelected = false;
-
-    console.log("hihoihih")
   }
   showUsers() {
     this.db.getAllUsers().subscribe((users: any) => {

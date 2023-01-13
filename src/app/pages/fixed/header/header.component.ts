@@ -26,6 +26,7 @@ export class HeaderComponent implements OnInit {
   isImageSelected!: boolean;
   format!: string;
   url!: string | ArrayBuffer | null;
+  userDetail  !: any;
 
   constructor(private router: Router, private auth: AuthService, private db: DatabaseService, private toastr: ToastrService, private util: UtilService) {
     Notiflix.Notify.init({});
@@ -36,6 +37,9 @@ export class HeaderComponent implements OnInit {
     this.auth.logoutStatus.subscribe((status: any) => {
       this.loginStatus = status;
     })
+    this.userDetail = JSON.parse(localStorage.getItem("userData") || '');
+    console.log(this.userDetail);
+
   }
 
 
@@ -67,6 +71,7 @@ export class HeaderComponent implements OnInit {
 
           this.db.addPost({ postData: { ...postContent, imageUrl: response } })
           Notiflix.Notify.success('Post Uploaded Successfully');
+          this.router.navigate(['/home'])
         })
         flag = 1;
         this.message = ''

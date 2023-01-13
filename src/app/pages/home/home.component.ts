@@ -31,14 +31,17 @@ export class HomeComponent implements OnInit {
   sending: boolean = false;
   displayComm: any;
   displayCommBoolean: Boolean = false;
+  resouceData: any[] = []
   ngOnInit(): void {
     this.getPosts()
     this.getUserData()
     this.trendingPosts()
+    this.getResources()
   }
   getUserData() {
     this.db.getUserData(this.token).subscribe((userData: any) => {
       console.log(userData, "User Data");
+      localStorage.setItem("userData", JSON.stringify(userData));
     })
   }
   displayComment(id: any) {
@@ -131,6 +134,13 @@ export class HomeComponent implements OnInit {
   }
   unfollow(postAuthorId: any) {
     this.db.unfollow(postAuthorId, this.token).subscribe((res: any) => {
+    })
+  }
+
+  getResources() {
+    this.db.getNews().subscribe((res: any) => {
+      console.log(res);
+      this.resouceData = res;
     })
   }
 }

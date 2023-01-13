@@ -11,6 +11,7 @@ import { BehaviorSubject } from 'rxjs';
 import { arrayUnion, increment } from '@angular/fire/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { arrayRemove, DocumentSnapshot, QuerySnapshot, serverTimestamp } from 'firebase/firestore';
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http';
 
 
 @Injectable({
@@ -22,12 +23,12 @@ export class DatabaseService {
   userData$: Observable<userData[]>;
   postData$!: Observable<any[]>;
   postLikeData$!: Observable<any[]>;
-  private basePath = 'post/images'
+  basePath = 'post/images'
   downloadURL: any;
   error!: void;
   chatCollection: AngularFirestoreCollection<chat>;
   subscription: any;
-  constructor(private afs: AngularFirestore, private fireStorage: AngularFireStorage) {
+  constructor(private afs: AngularFirestore, private fireStorage: AngularFireStorage, private https: HttpClient) {
     this.userDatasCollection = afs.collection<userData>('users');
     this.postDatasCollection = afs.collection<any>('posts');
     this.chatCollection = afs.collection<chat>('chat');
@@ -37,12 +38,15 @@ export class DatabaseService {
   addUserData({ userData }: { userData: userData; }): any {
     return from((this.userDatasCollection.doc(userData.uid).set(userData)))
   }
-  //Update user data from database
-  updateUserData({ userData }: { userData: userData; }): Observable<void> {
+  //Update user specific field of data from database
+  updateUserData(id: any, key: any, data: any): Observable<void> {
     return from(
-      this.afs.doc<userData>(`users/${userData.id}`).update({
-      }),
+      this.userDatasCollection.doc(id).update({ [key]: data })
     );
+  }
+  //Update user data from database
+  updateUserAllData(id: any, data: any) {
+    return from(this.userDatasCollection.doc(id).update(data))
   }
   //Delete a user
   DeleteUserData(): void {
@@ -157,7 +161,8 @@ export class DatabaseService {
           file: image,
           name: rendomNum
         };
-        const filePath = `/post/video/${new Date().getTime()}${fileObject.file.name}`;
+        this.basePath = 'post/video'
+        const filePath = `/${this.basePath}/${new Date().getTime()}${fileObject.file.name}`;
         const storageRef = this.fireStorage.ref(filePath);
         const uploadTask = this.fireStorage.upload(filePath, fileObject.file);
 
@@ -256,5 +261,67 @@ export class DatabaseService {
   }
   getUserData(token: string) {
     return from(this.afs.collection('users').doc(token).valueChanges())
+  }
+
+  //cover Upload
+  pushCoverToStorage(file: any, id: any) {
+    let rendomNum = Math.floor(Math.random() * 100000).toString();
+    let fileObject = {
+      file: file,
+      name: rendomNum
+    };
+    this.basePath = 'cover'
+    const filePath = `/${this.basePath}/${id}`;
+    const storageRef = this.fireStorage.ref(filePath);
+    const uploadTask = this.fireStorage.upload(filePath, fileObject.file);
+
+    return new Observable((observer) => {
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe((downloadURL: any) => {
+            // Emit the download URL and complete the observable
+            observer.next(downloadURL);
+            file.name = fileObject.name;
+            observer.complete();
+          });
+        }),
+        catchError((err: any) => {
+          return of(err);
+        })
+      ).subscribe();
+    })
+  }
+
+  pushProfileToStorage(file: any, id: any) {
+    let fileObject = {
+      file: file,
+      name: id
+    };
+    this.basePath = 'profile'
+
+    const filePath = `/${this.basePath}/${id}`;
+    const storageRef = this.fireStorage.ref(filePath);
+    const uploadTask = this.fireStorage.upload(filePath, fileObject.file);
+
+    return new Observable((observer) => {
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe((downloadURL: any) => {
+            // Emit the download URL and complete the observable
+            observer.next(downloadURL);
+            file.name = fileObject.name;
+            observer.complete();
+          });
+        }),
+        catchError((err: any) => {
+          return of(err);
+        })
+      ).subscribe();
+    })
+  }
+
+  getNews() {
+    const headers = new HttpHeaders({ 'X-RapidAPI-Key': 'a5187d0bbfmshd40c41bdd972b69p1c8cb0jsn5e51bf7ca41a' })
+    return from(this.https.get('https://bing-news-search1.p.rapidapi.com/news?count=4', { 'headers': headers }))
   }
 }

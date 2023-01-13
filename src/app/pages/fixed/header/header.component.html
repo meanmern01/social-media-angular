@@ -7,8 +7,12 @@
       <a routerLink="/login" class="btn btn-outline-success me-3">Login</a>
       <a routerLink="/signup" class="btn btn-outline-success" type="submit">Sign up</a>
     </div>
-    <div class="d-flex" *ngIf="isLogin()">
-      <a (click)="logout()" class="btn btn-outline-success me-3">Logout</a>
+    <div class="d-flex align-items-center" *ngIf="isLogin()">
+      <div class="mx-2">
+        <img src="{{userDetail?.profileImage}}" alt="" width="40" height="40" class="rounded-circle">
+        <span class="h6 ms-1">{{userDetail?.name}}</span>
+      </div>
+      <a (click)="logout()" class="btn btn-outline-danger me-3"><i class="fa-solid fa-arrow-right-from-bracket"></i></a>
     </div>
   </div>
 </nav>

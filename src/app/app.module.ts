@@ -1,3 +1,4 @@
+import { HttpClientModule } from '@angular/common/http';
 import { FooterComponent } from './pages/fixed/footer/footer.component';
 import { HeaderComponent } from './pages/fixed/header/header.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
@@ -18,11 +19,16 @@ import { SidebarComponent } from './pages/fixed/sidebar/sidebar.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { SwiperModule } from 'swiper/angular';
 import { NgxEmojiPickerModule } from 'ngx-emoji-picker';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChatComponent } from './pages/chat/chat.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,20 +39,25 @@ import { ChatComponent } from './pages/chat/chat.component';
     FooterComponent,
     SidebarComponent,
     ChatComponent,
+    ProfileComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
     AngularFirestoreModule,
+    HttpClientModule,
     AngularFireAuthModule,
     EmojiModule,
     NgxEmojiPickerModule,
     PickerModule,
+    ReactiveFormsModule,
+    NgbCarouselModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       toastClass: 'toast'
     }),
+    SwiperModule,
     TabsModule,
     CommonModule,
     MatSnackBarModule,

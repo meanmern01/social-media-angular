@@ -6,7 +6,11 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item list-group-item-action d-flex align-items-center" *ngFor="let user of allUsers"
           (click)="showMessages(user.uid, user.name)">
-          <img src="https://via.placeholder.com/50x50" class="rounded-circle me-2" alt="Profile picture">
+          <img
+            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
+            class="rounded-circle me-2" *ngIf="!user?.profileImage" width="50" height="50" alt="">
+          <img src="{{user?.profileImage}}" *ngIf="user?.profileImage" width="50" height="50"
+            class="rounded-circle me-2" alt="Profile picture">
           <div class="w-100">
             <h4 class="m-0">{{user.name}}</h4>
             <p class="text-muted m-0">{{''}}</p>
