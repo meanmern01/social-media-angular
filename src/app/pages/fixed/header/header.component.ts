@@ -37,7 +37,12 @@ export class HeaderComponent implements OnInit {
     this.auth.logoutStatus.subscribe((status: any) => {
       this.loginStatus = status;
     })
-    this.userDetail = JSON.parse(localStorage.getItem("userData") || '');
+    // this.userDetail = JSON.parse(localStorage.getItem("userData") || '');
+    if (this.loginStatus) {
+      this.db.getUserData(this.token).subscribe(uData => {
+        this.userDetail = uData;
+      })
+    }
     console.log(this.userDetail);
 
   }

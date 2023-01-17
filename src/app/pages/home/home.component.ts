@@ -111,6 +111,8 @@ export class HomeComponent implements OnInit {
   trendingPosts() {
     this.db.trendingPosts().subscribe((posts: any[]) => {
       this.trendingPostsData = posts;
+      console.log(this.trendingPostsData, "abcdefghijklmnopqrstuvwxyz");
+
     });
 
   }

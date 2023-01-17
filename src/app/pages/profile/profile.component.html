@@ -197,8 +197,11 @@
         <li [ngbNavItem]="3">
           <a ngbNavLink>Photos</a>
           <ng-template ngbNavContent>
-            <div class="d-flex flex-wrap" *ngFor="let photo of filterdPost">
-              <img src="{{photo.imageUrl}}" alt="" *ngIf="photo.format === 'image'">
+            <div class="d-flex flex-wrap">
+              <div *ngFor="let photo of filterdPost">
+                <img src="{{photo.imageUrl}}" alt="" width="500" height="500" style="object-fit: cover;"
+                  *ngIf="photo.format === 'image'">
+              </div>
             </div>
           </ng-template>
         </li>

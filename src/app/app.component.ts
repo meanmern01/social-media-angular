@@ -7,9 +7,15 @@ import { filter } from 'rxjs';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+
 export class AppComponent implements OnInit {
+  private searchClient = {
+    appId: 'L9X0MTZMRZ',
+    apikey: '5dfbacc2564682c5a956d82446c0c866'
+  }
   title = 'social-media-app';
   isAuth!: boolean;
+  // index =
   constructor(private route: ActivatedRoute, private router: Router) {
     router.events.pipe(
       filter(event => event instanceof NavigationEnd)

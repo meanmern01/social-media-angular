@@ -28,7 +28,9 @@ import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChatComponent } from './pages/chat/chat.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SearchComponent } from './pages/search/search.component';
-
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { MatCardModule } from '@angular/material/card';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
   declarations: [
@@ -47,14 +49,17 @@ import { SearchComponent } from './pages/search/search.component';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    MatCardModule,
     AngularFirestoreModule,
     HttpClientModule,
+    Ng2SearchPipeModule,
     AngularFireAuthModule,
     EmojiModule,
     NgxEmojiPickerModule,
     PickerModule,
     ReactiveFormsModule,
     NgbCarouselModule,
+    MatAutocompleteModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       toastClass: 'toast'

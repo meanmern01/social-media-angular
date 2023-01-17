@@ -2,355 +2,179 @@
 
   <tabset #tabset>
     <tab tab1 heading="Newest" id="first" #first>
-      <div class="mt-4" *ngFor="let post of postsData ; let i = index">
-        <div *ngIf="postsData?.length">
-          <div class="d-flex mb-2 align-items-center">
-            <div class="profile-pic text-center"><img
-                src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
-                alt="profile" class="profile border border-success rounded-circle" width="80" height="80">
-            </div>
-
-            <div class="d-flex justify-content-center flex-column me-2">
-              <a class="h4"><span title="Like it"><i class="fa-solid fa-angle-up"></i></span></a>
-              <span class="mb-2">24</span>
-              <span>0</span>
-              <a class="h4"><span title="Dislike it"><i class="fa-solid fa-angle-down"></i></span></a>
-            </div>
-            <div class="profile-title d-flex flex-column">
-              <h2 class="">{{post?.title}}</h2>
-              <div class="d-flex align-items-center">
-                <span class="me-3">{{post?.name}}</span>
-              </div>
-              <div class="d-flex align-items-center">
-                <div class="d-flex align-items-center"><i class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i><span
-                    *ngIf="post?.likesCount > 0">{{post?.likesCount}}</span></div>
-                <span class="me-3 ms-3"><i
-                    class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post?.timeStamp | date:
-                  'short'}}</span>
-                <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i><span
-                    *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</span></span>
-              </div>
-            </div>
-            <div *ngIf="!checkAuthor(post.postAuthorId)">
-              <button (click)="follow(post.postAuthorId)" *ngIf="!followes(post.followers)"
-                class="btn btn-outline-success rounded-1">Follow</button>
-              <button (click)="unfollow(post.postAuthorId)" *ngIf="followes(post.followers)"
-                class="btn btn-outline-success rounded-1">Unfollow</button>
+      <div *ngFor="let post of postsData ; let i = index">
+        <div class="d-flex justify-content-center">
+          <mat-card class="example-card bg-transparent shadow-none">
+            <mat-card-header class="">
+              <div mat-card-avatar class="example-header-image"><img
+                  src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
+                  alt="" class=" profile border border-success rounded-circle"></div>
+              <mat-card-title>{{post.name}}</mat-card-title>
+              <mat-card-subtitle class=" dark">{{post.title}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src="{{post.imageUrl}}" class="rounded object-fit-fill" *ngIf="post.format == 'image'"
+              alt="Photo of a Shiba Inu">
+            <video src="{{post.imageUrl}}" *ngIf="post.format == 'video'" oncontextmenu="event.preventDefault();" alt=""
+              controls [muted]="true" loop width="600" height="400" autoplay class="rounded object-fit-cover"></video>
+          </mat-card>
+          <div class="post-actions d-flex flex-column justify-content-end align-items-end">
+            <button (click)="like($event, post.postId)" class="like cursor-pointer">
+              <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
+              <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
+              <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
+            </button>
+            <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
+              <i class="h6 mb-0 fa-regular fa-comment"></i>
+              <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
+            </button>
+            <div class="share cursor-pointer">
+              <i class="fa-solid fa-share"></i>
+              <p class="count">9.5k</p>
             </div>
           </div>
-          <div class="post-image mt-4 d-flex justify-content-center flex-column">
-            <div *ngIf="post.format == 'image'" class="d-flex justify-content-center ">
-              <img src="{{post.imageUrl}}" oncontextmenu="event.preventDefault();" alt="" width="500" height="500"
-                class="rounded object-fit-cover">
-              <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-                <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                  <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
-                  <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
-                  <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-                </button>
-                <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                  <i class="h6 mb-0 fa-regular fa-comment"></i>
-                  <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-                </button>
-                <div class="share cursor-pointer">
-                  <i class="fa-solid fa-share"></i>
-                  <p class="count">9.5k</p>
-                </div>
-              </div>
+        </div>
+        <div class="mx-auto comments-view scroll scroll-3" *ngIf="post.postId == displayComm && displayCommBoolean">
+          <h2 class="text-center">comments</h2>
+          <div class="row" *ngFor=" let comment of post?.comments">
+            <div class="img-fluid">
+              <img src="{{post.profileImage}}" alt="">
             </div>
-            <div *ngIf="post.format == 'video'" class="d-flex justify-content-center ">
-              <video src="{{post.imageUrl}}" oncontextmenu="event.preventDefault();" alt="" controls
-                controlsList="nodownload nofullscreen noremoteplayback" loop width="500" height="300" autoplay
-                class="rounded object-fit-cover"></video>
-              <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-                <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                  <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
-                  <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
-                  <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-                </button>
-                <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                  <i class="h6 mb-0 fa-regular fa-comment"></i>
-                  <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-                </button>
-                <div class="share cursor-pointer">
-                  <i class="fa-solid fa-share"></i>
-                  <p class="count">9.5k</p>
-                </div>
-              </div>
-            </div>
-            <div *ngIf="post.imageUrl === 'No file specified'">
-              <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-                <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                  <i *ngIf="!isLiked" class="fa-regular fa-heart"></i>
-                  <i *ngIf="isLiked" class="fa-solid text-danger fa-heart"></i>
-                  <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-                </button>
-
-                <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                  <i class="h6 mb-0 fa-regular fa-comment"></i>
-                  <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-                </button>
-                <div class="share cursor-pointer">
-                  <i class="fa-solid fa-share"></i>
-                  <p class="count">9.5k</p>
-                </div>
-              </div>
-            </div>
-            <div class="mx-auto comments-view scroll scroll-3" *ngIf="post.postId == displayComm && displayCommBoolean">
-              <h2 class="text-center">comments</h2>
-              <div class="row" *ngFor=" let comment of post?.comments">
-                <div class="img-fluid">
-                  <!-- <img src="{{post.profilepic}}" alt=""> -->
-                </div>
-                <p class="w-100">{{comment.user.name}}</p>
-                <p class="h5">
-                  {{ comment?.commentText}}
-                </p>
-              </div>
-            </div>
-            <div class="comment-area d-flex justify-content-center mt-5 position-relative">
-              <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
-                #commentField placeholder="Enter comment" required>
-              <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
-                class=" btn btn-success position-absolute send">
-                <i class="fa-regular fa-paper-plane"></i>
-              </button>
-              <button class="btn btn-success position-absolute send" *ngIf="sending">
-                <div class="spinner-border spinner-border-sm" role="status">
-                  <span class="visually-hidden">Loading...</span>
-                </div>
-              </button>
-            </div>
+            <p class="w-100">{{comment.user.name}}</p>
+            <p class="h5">
+              {{ comment?.commentText}}
+            </p>
           </div>
-          <div *ngIf="!postsData.length">
-            <h2>{{message}}</h2>
-          </div>
+        </div>
+        <div class="comment-area d-flex justify-content-center mt-5 position-relative">
+          <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
+            #commentField placeholder="Enter comment" required>
+          <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
+            class=" btn btn-success position-absolute send">
+            <i class="fa-regular fa-paper-plane"></i>
+          </button>
+          <button class="btn btn-success position-absolute send" *ngIf="sending">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </button>
         </div>
       </div>
     </tab>
     <tab tab2 heading="Trending" id="second" #second>
-      <div class="mt-4" *ngFor="let post of trendingPostsData ; let i = index">
-        <div class="d-flex mb-2 align-items-center">
-          <div class="profile-pic text-center"><img
-              src="https://1fid.com/wp-content/uploads/2022/06/cool-profile-picture-2-1024x1024.jpg" alt="profile"
-              class="profile border border-success rounded-circle">
-          </div>
-          <div class="profile-title d-flex flex-column">
-            <h2 class="">{{post?.title}}</h2>
-            <div class="d-flex align-items-center">
-              <span class="me-3">{{post?.name}}</span>
+      <div *ngFor="let post of trendingPostsData ; let i = index">
+        <div class="d-flex justify-content-center">
+          <mat-card class="example-card bg-transparent shadow-none">
+            <mat-card-header class="">
+              <div mat-card-avatar class="example-header-image"><img
+                  src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
+                  alt="" class=" profile border border-success rounded-circle"></div>
+              <mat-card-title>{{post.name}}</mat-card-title>
+              <mat-card-subtitle class=" dark">{{post.title}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src="{{post.imageUrl}}" class="rounded object-fit-fill" *ngIf="post.format == 'image'"
+              alt="Photo of a Shiba Inu">
+            <video src="{{post.imageUrl}}" *ngIf="post.format == 'video'" oncontextmenu="event.preventDefault();" alt=""
+              controls [muted]="true" loop width="600" height="400" autoplay class="rounded object-fit-cover"></video>
+          </mat-card>
+          <div class="post-actions d-flex flex-column justify-content-end align-items-end">
+            <button (click)="like($event, post.postId)" class="like cursor-pointer">
+              <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
+              <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
+              <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
+            </button>
+            <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
+              <i class="h6 mb-0 fa-regular fa-comment"></i>
+              <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
+            </button>
+            <div class="share cursor-pointer">
+              <i class="fa-solid fa-share"></i>
+              <p class="count">9.5k</p>
             </div>
-            <div class="d-flex align-items-center">
-              <div class="d-flex align-items-center"><i
-                  class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i>{{post?.likesCount}}</div>
-              <span class="me-3 ms-3"><i
-                  class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post?.timeStamp | date:
-                'short'}}</span>
-              <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i>64 comments</span>
-            </div>
-          </div>
-          <div>
-            <button class="btn btn-outline-success rounded-1">Follow</button>
           </div>
         </div>
-        <div class="post-image mt-4 d-flex justify-content-center flex-column">
-          <div *ngIf="post.format == 'image'" class="d-flex justify-content-center ">
-            <img src="{{post.imageUrl}}" alt="" width="500" height="500" class="rounded object-fit-cover">
-            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-              <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
-                <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
-                <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-              </button>
-              <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                <i class="h6 mb-0 fa-regular fa-comment"></i>
-                <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-              </button>
-              <div class="share cursor-pointer">
-                <i class="fa-solid fa-share"></i>
-                <p class="count">9.5k</p>
-              </div>
+        <div class="mx-auto comments-view scroll scroll-3" *ngIf="post.postId == displayComm && displayCommBoolean">
+          <h2 class="text-center">comments</h2>
+          <div class="row" *ngFor=" let comment of post?.comments">
+            <div class="img-fluid">
+              <img src="{{post.profileImage}}" alt="">
             </div>
-          </div>
-          <div *ngIf="post.format == 'video'" class="d-flex justify-content-center ">
-            <video src="{{post.imageUrl}}" alt="" controls width="500" height="300" autoplay
-              class="rounded object-fit-cover"></video>
-            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-              <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
-                <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
-                <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-              </button>
-              <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                <i class="h6 mb-0 fa-regular fa-comment"></i>
-                <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-              </button>
-              <div class="share cursor-pointer">
-                <i class="fa-solid fa-share"></i>
-                <p class="count">9.5k</p>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="post.imageUrl === 'No file specified'">
-            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-              <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
-                <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
-                <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-              </button>
-
-              <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                <i class="h6 mb-0 fa-regular fa-comment"></i>
-                <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-              </button>
-              <div class="share cursor-pointer">
-                <i class="fa-solid fa-share"></i>
-                <p class="count">9.5k</p>
-              </div>
-            </div>
-          </div>
-          <div class="mx-auto comments-view scroll scroll-3" *ngIf="post.postId == displayComm && displayCommBoolean">
-            <h2 class="text-center">comments</h2>
-            <div class="row" *ngFor=" let comment of post?.comments">
-              <div class="img-fluid">
-                <!-- <img src="{{post.profilepic}}" alt=""> -->
-              </div>
-              <p class="w-100">{{post?.name}}</p>
-              <p class="h5">
-                {{ comment?.commentText}}
-              </p>
-            </div>
-          </div>
-          <div class="comment-area d-flex justify-content-center mt-5 position-relative">
-            <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
-              #commentField placeholder="Enter comment" required>
-            <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
-              class=" btn btn-success position-absolute send">
-              <i class="fa-regular fa-paper-plane"></i>
-            </button>
-            <button class="btn btn-success position-absolute send" *ngIf="sending">
-              <div class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </button>
+            <p class="w-100">{{comment.user.name}}</p>
+            <p class="h5">
+              {{ comment?.commentText}}
+            </p>
           </div>
         </div>
-        <!-- <p *ngIf="error" class="text-danger text-center">{{error}}</p> -->
-        <div *ngIf="!postsData.length">
-          <h2>{{message}}</h2>
+        <div class="comment-area d-flex justify-content-center mt-5 position-relative">
+          <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
+            #commentField placeholder="Enter comment" required>
+          <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
+            class=" btn btn-success position-absolute send">
+            <i class="fa-regular fa-paper-plane"></i>
+          </button>
+          <button class="btn btn-success position-absolute send" *ngIf="sending">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </button>
         </div>
       </div>
     </tab>
     <tab tab3 heading="Discover" id="third" #third>
-      <div class="mt-4" *ngFor="let post of postsData ; let i = index">
-        <div class="d-flex mb-2 align-items-center">
-          <div class="profile-pic text-center"><img
-              src="https://1fid.com/wp-content/uploads/2022/06/cool-profile-picture-2-1024x1024.jpg" alt="profile"
-              class="profile border border-success rounded-circle">
-          </div>
-          <div class="profile-title d-flex flex-column">
-            <h2 class="">{{post?.title}}</h2>
-            <div class="d-flex align-items-center">
-              <span class="me-3">{{post?.name}}</span>
+      <div *ngFor="let post of postsData ; let i = index">
+        <div class="d-flex justify-content-center">
+          <mat-card class="example-card bg-transparent shadow-none">
+            <mat-card-header class="">
+              <div mat-card-avatar class="example-header-image"><img
+                  src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
+                  alt="" class=" profile border border-success rounded-circle"></div>
+              <mat-card-title>{{post.name}}</mat-card-title>
+              <mat-card-subtitle class=" dark">{{post.title}}</mat-card-subtitle>
+            </mat-card-header>
+            <img mat-card-image src="{{post.imageUrl}}" class="rounded object-fit-fill" *ngIf="post.format == 'image'"
+              alt="Photo of a Shiba Inu">
+            <video src="{{post.imageUrl}}" *ngIf="post.format == 'video'" oncontextmenu="event.preventDefault();" alt=""
+              controls [muted]="true" loop width="600" height="400" autoplay class="rounded object-fit-cover"></video>
+          </mat-card>
+          <div class="post-actions d-flex flex-column justify-content-end align-items-end">
+            <button (click)="like($event, post.postId)" class="like cursor-pointer">
+              <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
+              <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
+              <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
+            </button>
+            <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
+              <i class="h6 mb-0 fa-regular fa-comment"></i>
+              <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
+            </button>
+            <div class="share cursor-pointer">
+              <i class="fa-solid fa-share"></i>
+              <p class="count">9.5k</p>
             </div>
-            <div class="d-flex align-items-center">
-              <div class="d-flex align-items-center"><i
-                  class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i>{{post?.likesCount}}</div>
-              <span class="me-3 ms-3"><i
-                  class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post?.timeStamp | date:
-                'short'}}</span>
-              <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i>64 comments</span>
-            </div>
-          </div>
-          <div>
-            <button class="btn btn-outline-success rounded-1">Follow</button>
           </div>
         </div>
-        <div class="post-image mt-4 d-flex justify-content-center flex-column">
-          <div *ngIf="post.format == 'image'" class="d-flex justify-content-center ">
-            <img src="{{post.imageUrl}}" alt="" width="500" height="500" class="rounded object-fit-cover">
-            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-              <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                <i *ngIf="!checkLikes(post.likes)" class="fa-regular fa-heart"></i>
-                <i *ngIf="checkLikes(post.likes)" class="fa-solid text-danger fa-heart"></i>
-                <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-              </button>
-              <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                <i class="h6 mb-0 fa-regular fa-comment"></i>
-                <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-              </button>
-              <div class="share cursor-pointer">
-                <i class="fa-solid fa-share"></i>
-                <p class="count">9.5k</p>
-              </div>
+        <div class="mx-auto comments-view scroll scroll-3" *ngIf="post.postId == displayComm && displayCommBoolean">
+          <h2 class="text-center">comments</h2>
+          <div class="row" *ngFor=" let comment of post?.comments">
+            <div class="img-fluid">
+              <img src="{{post.profileImage}}" alt="">
             </div>
-          </div>
-          <div *ngIf="post.format == 'video'" class="d-flex justify-content-center ">
-            <video src="{{post.imageUrl}}" alt="" controls width="500" height="300" autoplay
-              class="rounded object-fit-cover"></video>
-            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-              <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                <i *ngIf="!isLiked" class="fa-regular fa-heart"></i>
-                <i *ngIf="isLiked" class="fa-solid text-danger fa-heart"></i>
-                <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-              </button>
-              <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                <i class="h6 mb-0 fa-regular fa-comment"></i>
-                <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-              </button>
-              <div class="share cursor-pointer">
-                <i class="fa-solid fa-share"></i>
-                <p class="count">9.5k</p>
-              </div>
-            </div>
-          </div>
-          <div *ngIf="post.imageUrl === 'No file specified'">
-            <div class="post-actions d-flex flex-column justify-content-end align-items-end">
-              <button (click)="like($event, post.postId)" class="like cursor-pointer">
-                <i *ngIf="!isLiked" class="fa-regular fa-heart"></i>
-                <i *ngIf="isLiked" class="fa-solid text-danger fa-heart"></i>
-                <p class="count" *ngIf="post?.likesCount > 0">{{post?.likesCount}}</p>
-              </button>
-
-              <button class="comments cursor-pointer" (click)="displayComment(post?.postId)">
-                <i class="h6 mb-0 fa-regular fa-comment"></i>
-                <p class="count" *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</p>
-              </button>
-              <div class="share cursor-pointer">
-                <i class="fa-solid fa-share"></i>
-                <p class="count">9.5k</p>
-              </div>
-            </div>
-          </div>
-          <div class="mx-auto comments-view scroll scroll-3" *ngIf="post.postId == displayComm && displayCommBoolean">
-            <h2 class="text-center">comments</h2>
-            <div class="row" *ngFor=" let comment of post?.comments">
-              <div class="img-fluid">
-                <!-- <img src="{{post.profilepic}}" alt=""> -->
-              </div>
-              <p class="w-100">{{post?.name}}</p>
-              <p class="h5">
-                {{ comment?.commentText}}
-              </p>
-            </div>
-          </div>
-          <div class="comment-area d-flex justify-content-center mt-5 position-relative">
-            <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
-              #commentField placeholder="Enter comment" required>
-            <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
-              class=" btn btn-success position-absolute send">
-              <i class="fa-regular fa-paper-plane"></i>
-            </button>
-            <button class="btn btn-success position-absolute send" *ngIf="sending">
-              <div class="spinner-border spinner-border-sm" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-            </button>
+            <p class="w-100">{{comment.user.name}}</p>
+            <p class="h5">
+              {{ comment?.commentText}}
+            </p>
           </div>
         </div>
-        <!-- <p *ngIf="error" class="text-danger text-center">{{error}}</p> -->
-        <div *ngIf="!postsData.length">
-          <h2>{{message}}</h2>
+        <div class="comment-area d-flex justify-content-center mt-5 position-relative">
+          <input (keydown.Enter)="comment(commentField.value, post.postId, i)" type="text" class="form-control w-50"
+            #commentField placeholder="Enter comment" required>
+          <button *ngIf="!sending" (click)="comment(commentField.value, post.postId, i)"
+            class=" btn btn-success position-absolute send">
+            <i class="fa-regular fa-paper-plane"></i>
+          </button>
+          <button class="btn btn-success position-absolute send" *ngIf="sending">
+            <div class="spinner-border spinner-border-sm" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </button>
         </div>
       </div>
     </tab>
