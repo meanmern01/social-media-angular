@@ -1,3 +1,4 @@
+import { SearchComponent } from './pages/search/search.component';
 import { ChatComponent } from './pages/chat/chat.component';
 import { LoginGuard } from './shared/login.guard';
 import { HomeComponent } from './pages/home/home.component';
@@ -29,10 +30,17 @@ const routes: Routes = [
   {
     path: 'chat',
     component: ChatComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'profile',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'search',
+    component: SearchComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

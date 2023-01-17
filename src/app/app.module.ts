@@ -27,6 +27,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NgbCarouselModule } from '@ng-bootstrap/ng-bootstrap';
 import { ChatComponent } from './pages/chat/chat.component';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { SearchComponent } from './pages/search/search.component';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
     SidebarComponent,
     ChatComponent,
     ProfileComponent,
+    SearchComponent,
   ],
   imports: [
     BrowserModule,

@@ -13,7 +13,7 @@
             </a>
           </li>
           <li>
-            <a data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+            <a data-bs-toggle="collapse" routerLink="/search" class="nav-link px-0 align-middle">
               <i class="fa-solid fa-magnifying-glass"></i> <span class="ms-1 d-none d-sm-inline">Search</span> </a>
           </li>
           <li>
@@ -103,12 +103,12 @@
 
         </div>
         <h4>Resources</h4>
-        <div class="card shadow pb-3 mb-4" style="width: 22rem;" *ngFor="let resource of resourceData.value">
+        <div class="card shadow pb-3 mb-4" style="width: 22rem;" *ngFor="let resource of resourceData">
           <img class="card-img-top rounded-bottom-pill" src="https://wallpaperaccess.com/full/625102.png"
             alt="Card image cap">
           <div class="card-body">
-            <h5 class="card-title">Marketing Channels that consistently work for founder.</h5>
-            <p class="card-text">I’ve anlayzed all 479 founder interview on indie Hackers & uncoverd the mar......</p>
+            <h3 class="card-title h3">{{resource.name}}</h3>
+            <p class="card-text">{{resource.description}}</p>
           </div>
         </div>
       </div>

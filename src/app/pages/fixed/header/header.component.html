@@ -32,10 +32,10 @@
           <div class="modal-body">
             <div class="modal-profile d-flex align-items-center overflow-hidden">
               <div class="modal-profile-pic">
-                <img src="https://1fid.com/wp-content/uploads/2022/06/cool-profile-picture-2-1024x1024.jpg" alt=""
-                  width="50" class="border border-success rounded-circle">
+                <img src="{{userDetail.profileImage}}" alt="" width="50" height="50"
+                  class="border border-success rounded-circle">
               </div>
-              <div class="modal-profile-name ms-2"><span class="fw-bolder">Peter Parker</span></div>
+              <div class="modal-profile-name ms-2"><span class="fw-bolder">{{userDetail.name}}</span></div>
             </div>
 
             <div class="modal-text mt-3 w-100">

@@ -139,8 +139,8 @@ export class HomeComponent implements OnInit {
 
   getResources() {
     this.db.getNews().subscribe((res: any) => {
-      console.log(res);
-      this.resouceData = res;
+      console.log(res.value);
+      this.resouceData = res.value;
     })
   }
 }

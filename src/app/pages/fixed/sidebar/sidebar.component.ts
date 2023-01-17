@@ -1,5 +1,5 @@
 import { DatabaseService } from './../../../services/database.service';
-import { filter } from 'rxjs';
+import { filter, take } from 'rxjs';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 
@@ -70,9 +70,11 @@ export class SidebarComponent implements OnInit {
     });
   }
   getResources() {
-    this.db.getNews().subscribe((res: any) => {
-      this.resourceData = res;
-      console.log(this.resourceData);
+    this.db.getNews().pipe(
+      take(4)
+    ).subscribe((res: any) => {
+      this.resourceData = res.value;
+      console.log(this.resourceData, "dsflsfkj.sjnf,ksdjf,sbdf b,fjsia");
 
     })
   }

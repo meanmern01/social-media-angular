@@ -24,6 +24,8 @@ export interface post {
   email: String;
   uid: String;
   imageUrl?: string;
+  coverImage?: string;
+  profileImage: string;
   format?: string
   followers: Array<any>;
   likes?: any;

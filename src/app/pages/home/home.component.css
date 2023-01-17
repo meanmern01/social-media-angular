@@ -4,11 +4,11 @@
   --color-black: black;
 }
 .profile {
-  max-width: 58%;
+  max-width: 100%;
 }
-.profile-pic {
+/* .profile-pic {
   width: 15%;
-}
+} */
 .profile-title {
   width: 55%;
 }
