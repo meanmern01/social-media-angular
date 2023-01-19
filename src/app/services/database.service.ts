@@ -58,7 +58,6 @@ export class DatabaseService {
   }
   // Add Post
   addPost({ postData }: { postData: any; }): Observable<DocumentReference> {
-    console.log("Uploading post...");
     let uid = this.afs.createId()
     return from(this.postDatasCollection.add({ ...postData, timeStamp: +new Date(), uid: uid }))
   }
@@ -69,10 +68,7 @@ export class DatabaseService {
         return uactions.map(userAction => {
           const uData = userAction.payload.doc.data() as any;
           return uData
-
-
         })
-
       })
     )
     const posts = this.afs.collection('posts').snapshotChanges().pipe(
@@ -198,17 +194,13 @@ export class DatabaseService {
         return uactions.map(userAction => {
           const uData = userAction.payload.doc.data() as any;
           return uData
-
-
         })
-
       })
     )
     const posts = this.afs.collection('posts', ref => ref.orderBy('likesCount', 'desc')).snapshotChanges().pipe(
       map(pactions => {
         return pactions.map(postAction => {
           const pData = postAction.payload.doc.data() as any;
-          console.log(pData);
 
           return { ...pData, postId: postAction.payload.doc.id }
         })
@@ -219,13 +211,27 @@ export class DatabaseService {
       map(arr => arr.reduce(function (acc, cur) {
         let result: any = []
         acc.filter((x: any, i: number) => result.push({ ...x, ...cur.filter((e: any) => e?.uid == x?.postAuthorId)[0] }))
-        console.log(result)
+        console.log(result);
+
         return result
       }
       )))
-    console.log(combinedList);
 
-    return combinedList;
+    const commentCombinedList = combineLatest<any[]>(combinedList, user).pipe(
+      map(arr => arr.reduce(function (acc, cur) {
+
+        let result: any = []
+        acc.filter((x: any, i: number) => result.push({
+          ...x, comments: x?.comments?.filter((e: any) => {
+            return e.user = cur.filter((a: any) => a?.uid == e.userId)[0]
+          })
+        }))
+        return result
+      }
+      )
+      )
+    )
+    return commentCombinedList;
   }
   //Add a followers to the database
   follow(postAuthorId: any, id: any) {
@@ -245,7 +251,6 @@ export class DatabaseService {
 
   //send Message
   sendMessage(message: chat) {
-    console.log("Sending message", message);
     return from(this.afs.collection('/chats').add(message))
   }
   //get message
@@ -259,7 +264,7 @@ export class DatabaseService {
       });
     });
   }
-  getUserData(token: string) {
+  getUserData(token: any) {
     return from(this.afs.collection('users').doc(token).valueChanges())
   }
 

@@ -2,27 +2,36 @@
   <div class="row">
     <!-- Profile Pic -->
     <div class="profile-back mb-2"
-      style="background-image: url({{userData.coverImage}}); background-position: center center; background-size: cover ; background-repeat: no-repeat;">
-      <input type="file" class="visually-hidden" name="cover" #cover id="cover" (change)="coverUpload(cover.files)">
-      <a (click)="profile.click() ; ">
-        <input type="file" name="profile" id="profile" (change)="profileUpload(profile.files)" #profile
-          class="visually-hidden">
+      style="background-image: url({{userData?.coverImage}}); background-color: aliceblue; background-position: center center; background-size: cover ; background-repeat: no-repeat;">
+      <input type="file" class="visually-hidden" name="cover" #cover id="cover" (change)="coverUpload(cover?.files)">
+      <a (click)="profile.click();" *ngIf="!isViewer">
+        <input type="file" name="profile" id="profile" accept="image/*" (change)="profileUpload(profile?.files)"
+          #profile class="visually-hidden">
         <img
           src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
-          class="profile-pic" *ngIf="!userData.profileImage" alt="">
-        <img src="{{userData.profileImage}}" *ngIf="userData.profileImage" alt="" class="profile-pic"
+          class="profile-pic" *ngIf="!userData?.profileImage" alt="">
+        <img src="{{userData?.profileImage}}" *ngIf="userData?.profileImage" alt="" class="profile-pic"
           style="cursor: pointer;">
       </a>
-      <button (click)="cover.click()" class="edit-btn btn btn-light"><span><i class="fa-solid fa-camera me-2">
+      <img
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
+        class="profile-pic" *ngIf="!userData?.profileImage" alt="">
+      <img src="{{userData?.profileImage}}" *ngIf="userData?.profileImage" alt="" class="profile-pic"
+        style="cursor: pointer;">
+      <button (click)="cover?.click()" *ngIf="!isViewer" class="edit-btn btn btn-light"><span><i
+            class="fa-solid fa-camera me-2">
           </i>Edit Cover Photo</span></button>
     </div>
     <div class="user-details col-6 pt-5">
-      <h2>{{userData.name}}</h2>
-      <pre class="fw-light"><p class="fw-bolder">Bio : </p>{{userData.bio}}</pre>
-      <h4 class="fw-light"><span class="fw-bolder">Location : </span>{{userData.location}}</h4>
-      <h4 class="fw-light"><span class="fw-bolder">Age :</span>{{userData.age}}</h4>
-      <h4 class="fw-light"><span class="fw-bolder">Website Link : </span><a class="text-light text-decoration-none ms-1"
-          href="{{userData.url}}">{{userData.url}}</a></h4>
+      <h2>{{userData?.name}}</h2>
+      <pre class="fw-light"><p class="fw-bolder">Bio : </p>{{userData?.bio}}</pre>
+      <h4 class="fw-light"><span class="fw-bolder">Location : </span>{{userData?.location}}</h4>
+
+      <h4 class="fw-light"><span class="fw-bolder">Age :</span>{{userData?.age}}</h4>
+      <h4 class="fw-light"><span class="fw-bolder">Website Link : </span><a class="text-decoration-none"
+          href="{{userData?.url}}">{{userData?.url}}</a></h4>
+      <h4 class="fw-light"><span class="fw-bolder">Phone Number: </span><a class="text-decoration-none"
+          href="tel:{{userData?.phone}}">{{userData?.phone}}</a></h4>
     </div>
     <div class="col-6 text-end pt-3 pe-3">
       <!-- <------------------------------------------< Edit Profile >------------------------------------------>
@@ -45,7 +54,7 @@
             <div class="mb-3">
               <label for="bio">Bio :</label>
               <textarea type="text" formControlName="bio" class="form-control" name="bio" id="bio"></textarea>
-              <div *ngIf="bio?.invalid && bio?.touched">
+              <div class="text-danger" *ngIf="bio?.invalid && bio?.touched">
                 <div *ngIf="bio?.errors?.['required']">
                   Bio is required
                 </div>
@@ -83,7 +92,7 @@
               </div>
             </div>
             <div class="mb-3">
-              <label for="url">Website :</label>
+              <label for="url">Website :(Please add with https:// or http://)</label>
               <input type="url" formControlName="url" class="form-control" name="url" id="url" />
             </div>
             <button type="submit" (click)="modal.dismiss('Save Button')" class="btn btn-success me-2">Save</button>
@@ -92,7 +101,8 @@
         </div>
 
       </ng-template>
-      <button (click)="open(content)" class="btn btn-success"><i class="fa-solid fa-pen-to-square"></i> Edit
+      <button *ngIf="!isViewer" (click)="open(content)" class="btn btn-success"><i
+          class="fa-solid fa-pen-to-square"></i> Edit
         Profile</button>
     </div>
     <div class="border rounded">

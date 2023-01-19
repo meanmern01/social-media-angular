@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
     route.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      if (event.url === '/chat' || event.url === '/trending' || event.url === '/search' || event.url === '/profile') {
+      if (event.url === '/chat' || event.url === '/trending' || event.url === '/search' || event.url.includes('/profile')) {
         this.show = true;
       } else {
         this.show = false;
@@ -74,7 +74,6 @@ export class SidebarComponent implements OnInit {
       take(4)
     ).subscribe((res: any) => {
       this.resourceData = res.value;
-      console.log(this.resourceData, "dsflsfkj.sjnf,ksdjf,sbdf b,fjsia");
 
     })
   }

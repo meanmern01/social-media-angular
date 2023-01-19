@@ -41,6 +41,11 @@ const routes: Routes = [
     path: 'search',
     component: SearchComponent,
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    canActivate: [AuthGuard]
   }
 ];
 

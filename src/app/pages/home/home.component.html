@@ -4,13 +4,38 @@
     <tab tab1 heading="Newest" id="first" #first>
       <div *ngFor="let post of postsData ; let i = index">
         <div class="d-flex justify-content-center">
+          <div class="d-flex justify-content-center flex-column me-2">
+            <a class="h4"><span title="Like it"><i class="fa-solid fa-angle-up"></i></span></a>
+            <span class="mb-2">24</span>
+            <span>0</span>
+            <a class="h4"><span title="Dislike it"><i class="fa-solid fa-angle-down"></i></span></a>
+          </div>
           <mat-card class="example-card bg-transparent shadow-none">
             <mat-card-header class="">
               <div mat-card-avatar class="example-header-image"><img
                   src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
-                  alt="" class=" profile border border-success rounded-circle"></div>
-              <mat-card-title>{{post.name}}</mat-card-title>
-              <mat-card-subtitle class=" dark">{{post.title}}</mat-card-subtitle>
+                  alt="" class=" profile border border-success rounded-circle" oncontextmenu="event.preventDefault();">
+              </div>
+              <mat-card-title>{{post.title}}</mat-card-title>
+              <mat-card-subtitle class="dark">{{post.name}}</mat-card-subtitle>
+              <mat-card-subtitle class="mt-2 dark">
+                <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center"><i
+                      class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i><span
+                      *ngIf="post?.likesCount > 0">{{post?.likesCount}}</span></div>
+                  <span class="me-3 ms-3"><i
+                      class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post?.timeStamp | date:
+                    'short'}}</span>
+                  <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i><span
+                      *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</span></span>
+                </div>
+              </mat-card-subtitle>
+              <div *ngIf="!checkAuthor(post.postAuthorId)" class="ms-auto">
+                <button (click)="follow(post.postAuthorId)" *ngIf="!followes(post.followers)"
+                  class="btn btn-outline-success rounded-1">Follow</button>
+                <button (click)="unfollow(post.postAuthorId)" *ngIf="followes(post.followers)"
+                  class="btn btn-outline-success rounded-1">Unfollow</button>
+              </div>
             </mat-card-header>
             <img mat-card-image src="{{post.imageUrl}}" class="rounded object-fit-fill" *ngIf="post.format == 'image'"
               alt="Photo of a Shiba Inu">
@@ -63,13 +88,38 @@
     <tab tab2 heading="Trending" id="second" #second>
       <div *ngFor="let post of trendingPostsData ; let i = index">
         <div class="d-flex justify-content-center">
+          <div class="d-flex justify-content-center flex-column me-2">
+            <a class="h4"><span title="Like it"><i class="fa-solid fa-angle-up"></i></span></a>
+            <span class="mb-2">24</span>
+            <span>0</span>
+            <a class="h4"><span title="Dislike it"><i class="fa-solid fa-angle-down"></i></span></a>
+          </div>
           <mat-card class="example-card bg-transparent shadow-none">
             <mat-card-header class="">
               <div mat-card-avatar class="example-header-image"><img
                   src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
-                  alt="" class=" profile border border-success rounded-circle"></div>
-              <mat-card-title>{{post.name}}</mat-card-title>
-              <mat-card-subtitle class=" dark">{{post.title}}</mat-card-subtitle>
+                  alt="" class=" profile border border-success rounded-circle" oncontextmenu="event.preventDefault();">
+              </div>
+              <mat-card-title>{{post.title}}</mat-card-title>
+              <mat-card-subtitle class="dark">{{post.name}}</mat-card-subtitle>
+              <mat-card-subtitle class="mt-2 dark">
+                <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center"><i
+                      class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i><span
+                      *ngIf="post?.likesCount > 0">{{post?.likesCount}}</span></div>
+                  <span class="me-3 ms-3"><i
+                      class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post?.timeStamp | date:
+                    'short'}}</span>
+                  <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i><span
+                      *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</span></span>
+                </div>
+              </mat-card-subtitle>
+              <div *ngIf="!checkAuthor(post.postAuthorId)" class="ms-auto">
+                <button (click)="follow(post.postAuthorId)" *ngIf="!followes(post.followers)"
+                  class="btn btn-outline-success rounded-1">Follow</button>
+                <button (click)="unfollow(post.postAuthorId)" *ngIf="followes(post.followers)"
+                  class="btn btn-outline-success rounded-1">Unfollow</button>
+              </div>
             </mat-card-header>
             <img mat-card-image src="{{post.imageUrl}}" class="rounded object-fit-fill" *ngIf="post.format == 'image'"
               alt="Photo of a Shiba Inu">
@@ -96,9 +146,9 @@
           <h2 class="text-center">comments</h2>
           <div class="row" *ngFor=" let comment of post?.comments">
             <div class="img-fluid">
-              <img src="{{post.profileImage}}" alt="">
+              <img src="{{post.profileImage}}" alt="" width="40" height="40" class="rounded-circle">
             </div>
-            <p class="w-100">{{comment.user.name}}</p>
+            <p class="w-100">{{comment?.user?.name}}</p>
             <p class="h5">
               {{ comment?.commentText}}
             </p>
@@ -122,13 +172,38 @@
     <tab tab3 heading="Discover" id="third" #third>
       <div *ngFor="let post of postsData ; let i = index">
         <div class="d-flex justify-content-center">
+          <div class="d-flex justify-content-center flex-column me-2">
+            <a class="h4"><span title="Like it"><i class="fa-solid fa-angle-up"></i></span></a>
+            <span class="mb-2">24</span>
+            <span>0</span>
+            <a class="h4"><span title="Dislike it"><i class="fa-solid fa-angle-down"></i></span></a>
+          </div>
           <mat-card class="example-card bg-transparent shadow-none">
             <mat-card-header class="">
               <div mat-card-avatar class="example-header-image"><img
                   src="{{post.profileImage || 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC'}}"
-                  alt="" class=" profile border border-success rounded-circle"></div>
-              <mat-card-title>{{post.name}}</mat-card-title>
-              <mat-card-subtitle class=" dark">{{post.title}}</mat-card-subtitle>
+                  alt="" class=" profile border border-success rounded-circle" oncontextmenu="event.preventDefault();">
+              </div>
+              <mat-card-title>{{post.title}}</mat-card-title>
+              <mat-card-subtitle class="dark">{{post.name}}</mat-card-subtitle>
+              <mat-card-subtitle class="mt-2 dark">
+                <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center"><i
+                      class="fa-regular text-danger fa-heart h5 mb-0 me-1"></i><span
+                      *ngIf="post?.likesCount > 0">{{post?.likesCount}}</span></div>
+                  <span class="me-3 ms-3"><i
+                      class="fa-regular fa-calendar-days me-2 h6 mb-0 text-success"></i>{{post?.timeStamp | date:
+                    'short'}}</span>
+                  <span><i class="h6 mb-0 me-2 fa-regular fa-comment"></i><span
+                      *ngIf="post?.comments?.length>0">{{post?.comments?.length}}</span></span>
+                </div>
+              </mat-card-subtitle>
+              <div *ngIf="!checkAuthor(post.postAuthorId)" class="ms-auto">
+                <button (click)="follow(post.postAuthorId)" *ngIf="!followes(post.followers)"
+                  class="btn btn-outline-success rounded-1">Follow</button>
+                <button (click)="unfollow(post.postAuthorId)" *ngIf="followes(post.followers)"
+                  class="btn btn-outline-success rounded-1">Unfollow</button>
+              </div>
             </mat-card-header>
             <img mat-card-image src="{{post.imageUrl}}" class="rounded object-fit-fill" *ngIf="post.format == 'image'"
               alt="Photo of a Shiba Inu">

@@ -43,7 +43,6 @@ export class HeaderComponent implements OnInit {
         this.userDetail = uData;
       })
     }
-    console.log(this.userDetail);
 
   }
 
@@ -72,7 +71,6 @@ export class HeaderComponent implements OnInit {
       let flag = 0;
       if (flag === 0) {
         this.db?.pushFileToStorage(this.image)?.subscribe((response: any) => {
-          console.log(response);
 
           this.db.addPost({ postData: { ...postContent, imageUrl: response } })
           Notiflix.Notify.success('Post Uploaded Successfully');

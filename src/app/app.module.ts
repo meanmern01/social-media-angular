@@ -12,6 +12,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from './environments/environment';
 import { SignupComponent } from './pages/signup/signup.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { HomeComponent } from './pages/home/home.component';
 import { ToastrModule } from 'ngx-toastr';
@@ -30,6 +31,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SearchComponent } from './pages/search/search.component';
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatCardModule } from '@angular/material/card';
+import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @NgModule({
@@ -51,12 +53,14 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     NgbModule,
     MatCardModule,
     AngularFirestoreModule,
+    ServiceWorkerModule.register('firebase-messaging-sw.js', { enabled: environment.production }),
     HttpClientModule,
     Ng2SearchPipeModule,
     AngularFireAuthModule,
     EmojiModule,
     NgxEmojiPickerModule,
     PickerModule,
+    AngularFireMessagingModule,
     ReactiveFormsModule,
     NgbCarouselModule,
     MatAutocompleteModule,
@@ -68,6 +72,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     TabsModule,
     CommonModule,
     MatSnackBarModule,
+    AngularFireMessagingModule,
     FormsModule,
     AngularFireModule.initializeApp(environment.firebase)
   ],

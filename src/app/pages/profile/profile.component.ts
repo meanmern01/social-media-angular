@@ -1,3 +1,4 @@
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { filter } from 'rxjs';
 import { DatabaseService } from './../../services/database.service';
@@ -84,16 +85,15 @@ export class ProfileComponent implements OnInit {
       title: 'UI/UX Community',
       members: '8k Members',
       url: '#'
-    },
-
-  ]
+    }]
   videosData: any[] = []
   userData!: any;
+  isViewer: boolean = false;
   token: any = localStorage.getItem('token');
   slidesPerPageConfig = { slidesPerView: 4 }
   filterdPost!: any[];
   editProfile: FormGroup;
-  constructor(private db: DatabaseService, private cd: ChangeDetectorRef, private modalService: NgbModal) {
+  constructor(private db: DatabaseService, private route: ActivatedRoute, private cd: ChangeDetectorRef, private modalService: NgbModal) {
     this.editProfile = new FormGroup({
       name: new FormControl('', Validators.required),
       bio: new FormControl('', Validators.required),
@@ -104,15 +104,17 @@ export class ProfileComponent implements OnInit {
     })
   }
   ngOnInit(): void {
+    this.route.paramMap.subscribe((e: any) => {
+      console.log(e.params.id);
+      this.token = e.params.id;
+      this.isViewer = true;
+    })
     this.getUserData()
     this.getPhotosOrVideos()
-
   }
   coverUpload(event: any) {
     let file = event[0]
-    console.log(file, "File");
     this.db.pushCoverToStorage(file, this.userData.uid).subscribe((url: any) => {
-      console.log(url);
       this.db.updateUserData(this.token, 'coverImage', url).subscribe((res) => {
         this.getUserData()
       })
@@ -120,9 +122,7 @@ export class ProfileComponent implements OnInit {
   }
   profileUpload(event: any) {
     let file = event[0]
-    console.log(file, "File");
     this.db.pushProfileToStorage(file, this.userData.uid).subscribe((url: any) => {
-      console.log(url);
       this.db.updateUserData(this.token, 'profileImage', url).subscribe((res) => {
         this.getUserData()
         this.cd.detectChanges()
@@ -132,15 +132,12 @@ export class ProfileComponent implements OnInit {
   getUserData() {
     this.db.getUserData(this.token).subscribe((res) => {
       this.userData = res
-      console.log(this.userData);
       localStorage.setItem('userData', JSON.stringify(res))
     })
   }
   getPhotosOrVideos() {
     this.db.getPosts().subscribe((res: any[]) => {
-      console.log("response: ", res);
       this.filterdPost = res.filter((f: any) => f.postAuthorId === this.userData.uid);
-      console.log(this.filterdPost, "hjdjhdshfsdjhhjMSV");
 
     })
   }
@@ -148,20 +145,15 @@ export class ProfileComponent implements OnInit {
     this.editProfile.patchValue(this.userData)
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then(
       (result) => {
-        console.log(result);
-
       }
     );
   }
   updateProfile() {
     if (this.editProfile.valid) {
-      console.log(this.editProfile.value)
-      // this.db.update(this.editProfile)
       let data = {
         ...this.userData,
         ...this.editProfile.value
       }
-      console.log(data);
       this.db.updateUserAllData(this.token, data).subscribe(data => {
         this.getUserData()
       });

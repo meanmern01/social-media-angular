@@ -9,22 +9,40 @@ import { Component, OnInit } from '@angular/core';
 export class SearchComponent implements OnInit {
   fillterdNames!: string;
   userNames: any[] = [];
+  allUsers: any;
+  token = localStorage.getItem('token');
   constructor(private db: DatabaseService) {
 
   }
   ngOnInit(): void {
     this.fillterUsers()
   }
-  search(value: any) {
-    console.log(value, 'Enterd value');
-  }
   fillterUsers() {
     this.db.getAllUsers().subscribe(users => {
-      console.log(users)
-      users.map(e => {
+      let fUsers = users.filter(user => user.uid != this.token)
+      console.log(fUsers);
+
+      fUsers.map(e => {
         this.userNames.push(e.name)
       })
+      this.allUsers = fUsers
     })
-
+  }
+  followes(data: any) {
+    data = data?.map((ele: any) => {
+      return ele
+    })
+    if (data?.includes(this.token)) {
+      return true
+    }
+    return false
+  }
+  follow(postAuthorId: any) {
+    this.db.follow(postAuthorId, this.token).subscribe((res: any) => {
+    })
+  }
+  unfollow(postAuthorId: any) {
+    this.db.unfollow(postAuthorId, this.token).subscribe((res: any) => {
+    })
   }
 }

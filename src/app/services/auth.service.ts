@@ -7,13 +7,15 @@ import { Router } from '@angular/router';
 import { GoogleAuthProvider } from 'firebase/auth';
 import { ToastrService } from 'ngx-toastr';
 import firebase from 'firebase/compat';
+import { AngularFireMessaging } from '@angular/fire/compat/messaging';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private afAuth: AngularFireAuth, private db: DatabaseService, private router: Router, private toastr: ToastrService) { }
+  constructor(private afAuth: AngularFireAuth, private afs: AngularFirestore, private messaging: AngularFireMessaging, private db: DatabaseService, private router: Router, private toastr: ToastrService) { }
   isLogout = new BehaviorSubject<Boolean>(true)
   logoutStatus = this.isLogout.asObservable()
   SignUp(user: any) {
@@ -23,7 +25,6 @@ export class AuthService {
       .then((result) => {
         Notiflix.Notify.success('You have been successfully registered!')
         this.db.addUserData({ userData: { ...rest, uid: result?.user?.uid } }).subscribe((res: any) => {
-          console.log(res)
         })
         this.router.navigate(['/login'])
       })
@@ -38,16 +39,20 @@ export class AuthService {
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         Notiflix.Notify.success('Login Successfully')
-        console.log(result.user?.uid);
 
         localStorage.setItem("token", result.user?.uid || '')
         setTimeout(() => {
           this.router.navigate(['/home'])
         }, 2000)
+        this.messaging.requestPermission.subscribe((permission: any) => {
+          console.log("Permission: ", permission);
+          this.messaging.getToken.subscribe((token: any) => {
+            console.log("Token: ", token);
+          })
+        })
         this.isLogout.next(false)
       })
       .catch((error) => {
-        console.log(error.message);
 
         if (error.message === 'Firebase: The password is invalid or the user does not have a password. (auth/wrong-password).') {
           Notiflix.Notify.failure("Email or Password is wrong. Please try again", {
@@ -93,23 +98,30 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        console.log(result.user, "Login With Data");
         let loginData = {
           name: result.user?.displayName || '',
           email: result.user?.email || '',
-          phoneNumber: result.user?.phoneNumber || '',
+          phone: result.user?.phoneNumber || '',
           uid: result.user?.uid || ''
         }
-        this.db.addUserData({ userData: loginData })
-        console.log('You have been successfully logged in!');
+        this.db.getUserData(result.user?.uid).subscribe(data => {
+          if (!data) {
+            this.db.addUserData({ userData: loginData })
+          }
+        })
         Notiflix.Notify.success("You have been successfully logged in !!", {
           timeout: 2000
         })
         localStorage.setItem('token', result.user?.uid || '')
         this.router.navigate(['/home']);
+        this.messaging.requestPermission.subscribe((permission: any) => {
+          console.log("Permission: ", permission);
+          this.messaging.getToken.subscribe((token: any) => {
+            console.log("Token: ", token);
+          })
+        })
       })
       .catch((error) => {
-        console.log(error);
       });
   }
 

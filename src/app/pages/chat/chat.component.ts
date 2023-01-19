@@ -72,7 +72,6 @@ export class ChatComponent implements OnInit {
       }
       this.db.sendMessage(messages).subscribe(data => {
         this.db.getMessages(this.mergeId).subscribe((message: any) => {
-          console.log('message', message)
           this.messages = message
         })
       })

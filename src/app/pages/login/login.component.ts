@@ -30,7 +30,6 @@ export class LoginComponent {
       const formatter = result.error.format()
       this.emailError = formatter?.email?._errors[0] || '';
       this.passwordError = formatter?.password?._errors[0] || '';
-      console.log(this.passwordError, this.emailError)
     } else {
       this.emailError = '';
       this.passwordError = '';

@@ -6,7 +6,7 @@ export interface userData {
   id?: string;
   uid: string;
   photoUrl?: string;
-  phoneNumber: string;
+  phone: string;
   userAvatar?: string;
   name: string;
   email: string;

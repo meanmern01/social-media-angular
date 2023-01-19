@@ -30,7 +30,6 @@ export class SignupComponent {
 
   constructor(private db: DatabaseService, private auth: AuthService) { }
   handleSubmit(name: any, email: any, phone: any, password: any, confirmPassword: any) {
-    console.log(name, email, phone, password, confirmPassword)
     let formData = {
       name,
       email,
@@ -52,16 +51,13 @@ export class SignupComponent {
       this.phoneError = formatter?.phoneNumber?._errors[0] || '';
       this.passwordError = formatter?.password?._errors[0] || '';
       this.cpasswordError = formatter?.cpassword?._errors[0] || '';
-      console.log(this.nameError, this.passwordError, this.cpasswordError, this.emailError, this.phoneError)
     } else {
-      console.log("You made it")
       if (password !== confirmPassword) {
         this.nameError = '';
         this.emailError = '';
         this.phoneError = '';
         this.passwordError = '';
         this.cpasswordError = "Password and Confirm Password must be the same."
-        console.log("miss matched");
       } else {
         this.nameError = '';
         this.emailError = '';
@@ -69,8 +65,6 @@ export class SignupComponent {
         this.passwordError = '';
         this.cpasswordError = '';
         this.auth.SignUp(formData).then((res: any) => {
-          console.log(res);
-
         })
       }
     }

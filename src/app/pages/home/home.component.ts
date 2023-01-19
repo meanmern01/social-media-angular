@@ -1,3 +1,4 @@
+import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import * as Notiflix from 'notiflix';
 import { post } from './../../modal/user-data.model';
 import { DatabaseService } from './../../services/database.service';
@@ -24,7 +25,7 @@ export class HomeComponent implements OnInit {
   trendingPostsData!: any[];
   isAuthor!: boolean;
   i: any;
-  constructor(private db: DatabaseService, private util: UtilService) { }
+  constructor(private db: DatabaseService, private util: UtilService, private messaging: AngularFireMessaging) { }
   postsData!: post[]
   isLiked: boolean = false;
   token = localStorage.getItem('token') || '';
@@ -39,10 +40,11 @@ export class HomeComponent implements OnInit {
     this.getResources()
   }
   getUserData() {
-    this.db.getUserData(this.token).subscribe((userData: any) => {
-      console.log(userData, "User Data");
-      localStorage.setItem("userData", JSON.stringify(userData));
-    })
+    if (this.token) {
+      this.db.getUserData(this.token).subscribe((userData: any) => {
+        localStorage.setItem("userData", JSON.stringify(userData));
+      })
+    }
   }
   displayComment(id: any) {
     this.displayComm = id
@@ -52,8 +54,6 @@ export class HomeComponent implements OnInit {
     this.db.getPosts().subscribe((res: post[]) => {
       if (res.length > 0) {
         this.postsData = res;
-        console.log(res);
-
       } else {
         this.message = "No posts found"
       }
@@ -111,8 +111,7 @@ export class HomeComponent implements OnInit {
   trendingPosts() {
     this.db.trendingPosts().subscribe((posts: any[]) => {
       this.trendingPostsData = posts;
-      console.log(this.trendingPostsData, "abcdefghijklmnopqrstuvwxyz");
-
+      console.log(posts)
     });
 
   }
@@ -141,7 +140,6 @@ export class HomeComponent implements OnInit {
 
   getResources() {
     this.db.getNews().subscribe((res: any) => {
-      console.log(res.value);
       this.resouceData = res.value;
     })
   }

@@ -7,5 +7,7 @@ export const environment = {
     storageBucket: "social-media-app-angular.appspot.com",
     messagingSenderId: "830183336414",
     appId: "1:830183336414:web:9e2c9c04bdd690ab1e554f"
-  }
+  },
+  messagingSenderId: '830183336414',
+  enableFirebase: true,
 };
