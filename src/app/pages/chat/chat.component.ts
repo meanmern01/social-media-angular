@@ -18,6 +18,7 @@ export class ChatComponent implements OnInit {
   reciver_Id: any;
   isSelected: boolean = false;
   reciver_Name: any;
+  reciver_Profile: any;
   messages$!: Observable<any>;
   personal_Data: any;
   mergeId!: string;
@@ -25,7 +26,6 @@ export class ChatComponent implements OnInit {
   constructor(private db: DatabaseService, private cd: ChangeDetectorRef) { }
   ngOnInit(): void {
     this.showUsers()
-    this.showMessages(this.reciver_Id, this.reciver_Name)
     this.isSelected = false;
   }
   showUsers() {
@@ -37,10 +37,10 @@ export class ChatComponent implements OnInit {
     )
 
   }
-  showMessages(userId: string, userName: any) {
-    if (userId !== null) {
+  showMessages(user: any) {
+    if (user !== null) {
       window.dispatchEvent(new Event('resize'))
-      let value = [this.sender_Id, userId]
+      let value = [this.sender_Id, user.uid]
       value.sort((a: any, b: any) => b.localeCompare(a))
       this.mergeId = value.join()
       this.db.getMessages(this.mergeId).subscribe((message: any) => {
@@ -50,8 +50,9 @@ export class ChatComponent implements OnInit {
 
     }
 
-    this.reciver_Id = userId;
-    this.reciver_Name = userName;
+    this.reciver_Id = user.uid;
+    this.reciver_Name = user.name;
+    this.reciver_Profile = user.profileImage;
     this.isSelected = true;
   }
   sendMessage(message: any) {

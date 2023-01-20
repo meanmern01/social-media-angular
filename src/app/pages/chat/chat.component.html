@@ -1,11 +1,11 @@
 <!-- chat.component.html -->
-<div class="container-fluid h-100">
+<div class="container-fluid mb-4 h-100">
   <div class="row h-100">
     <div class="h-100 border-end overflow-auto" [ngClass]="isSelected ? 'col-md-4':'col-md-12'">
       <!-- List of online users or chat rooms -->
       <ul class="list-group list-group-flush">
         <li class="list-group-item list-group-item-action d-flex align-items-center" *ngFor="let user of allUsers"
-          (click)="showMessages(user.uid, user.name)">
+          (click)="showMessages(user)">
           <img
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
             class="rounded-circle me-2" *ngIf="!user?.profileImage" width="50" height="50" alt="">
@@ -18,10 +18,10 @@
         </li>
       </ul>
     </div>
-    <div class="col-md-8 h-50" *ngIf="isSelected">
-      <div class="h-25 bg-light d-flex p-3">
+    <div class="col-md-8 px-0 message-height" *ngIf="isSelected">
+      <div class="h-25 bg-light align-items-center d-flex p-3">
         <div class="img-fluid me-2">
-          <img src="" alt="" width="50" height="50">
+          <img src="{{reciver_Profile}}" class="rounded-circle" alt="" width="50" height="50">
         </div>
         <div class="reciver-detailes">
           <h2 class="text-dark">{{reciver_Name}}</h2>

@@ -106,8 +106,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe((e: any) => {
       console.log(e.params.id);
-      this.token = e.params.id;
-      this.isViewer = true;
+      if (e.params.id) {
+        this.token = e.params.id;
+        this.isViewer = true;
+      }
     })
     this.getUserData()
     this.getPhotosOrVideos()
