@@ -108,64 +108,6 @@
     <div class="border rounded">
       <ul ngbNav #nav="ngbNav" class="nav-tabs">
         <li [ngbNavItem]="1">
-          <a ngbNavLink>Scrolls</a>
-          <ng-template ngbNavContent>
-            <div class="border-bottom mb-2" *ngFor="let scroll of scrollData">
-              <div class="d-flex align-items-center justify-content-between">
-                <div class="col-6 d-flex ">
-                  <img src="" alt="" width="50" height="50">
-                  <div class="d-flex align-items-start flex-column ms-2">
-                    <span class="h4 d-inline-block">Joseph Jack</span>
-                    <span class="d-inline-block">1 Jan, 2019</span>
-                  </div>
-                </div>
-                <div class="col-6 d-flex justify-content-end">
-                  <a href="#" class="text-light text-decoration-none mx-3"><i class="fa-solid fa-thumbtack"></i></a>
-                  <a href="#" class="text-light text-decoration-none mx-3"><i
-                      class="fa-solid fa-ellipsis-vertical"></i></a>
-                </div>
-              </div>
-              <div class="mx-auto col-11">
-                <p>
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard
-                  dummy text ever since the 1500s, when an unknown printer took a galley Lorem Ipsum is simply dummy
-                  text
-                  of
-                  the printing
-                  and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
-                  1500s,
-                  when an unknown
-                  printer took a galley.
-                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-                  industry's standard
-                  dummy text ever since the 1500s, when an unknown printer took a galley Lorem Ipsum is simply dummy
-                  text
-                  of
-                  the printing
-                  and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the
-                  1500s,
-                  when an unknown
-                  printer took a galley
-                </p>
-              </div>
-
-              <hr class="m-0">
-              <div class="d-flex p-2 text-center">
-                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
-                    class="fa-regular fa-thumbs-up"></i> Like</a>
-                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
-                    class="fa-solid fa-comment"></i> Comments</a>
-                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
-                    class="fa-regular fa-thumbs-down"></i> Dislike</a>
-                <a href="" class="w-20 me-2 text-decoration-none text-light border-end"><i
-                    class="fa-solid fa-repeat"></i>
-                  Respost</a>
-              </div>
-            </div>
-          </ng-template>
-        </li>
-        <li [ngbNavItem]="2">
           <a ngbNavLink>Groups</a>
           <ng-template ngbNavContent>
             <h2>Groups you’ve joined</h2>
@@ -204,7 +146,7 @@
             </swiper>
           </ng-template>
         </li>
-        <li [ngbNavItem]="3">
+        <li [ngbNavItem]="2">
           <a ngbNavLink>Photos</a>
           <ng-template ngbNavContent>
             <div class="d-flex flex-wrap">
@@ -215,7 +157,7 @@
             </div>
           </ng-template>
         </li>
-        <li [ngbNavItem]="4">
+        <li [ngbNavItem]="3">
           <a ngbNavLink>Video</a>
           <ng-template ngbNavContent>
             <div class="d-flex flex-wrap" *ngFor="let video of filterdPost">

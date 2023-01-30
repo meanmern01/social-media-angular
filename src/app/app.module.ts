@@ -18,6 +18,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { ToastrModule } from 'ngx-toastr';
 import { SidebarComponent } from './pages/fixed/sidebar/sidebar.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { EmojiModule } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { SwiperModule } from 'swiper/angular';
@@ -33,6 +34,8 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { MatCardModule } from '@angular/material/card';
 import { AngularFireMessagingModule } from '@angular/fire/compat/messaging';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { GroupsComponent } from './pages/groups/groups.component';
+import { MatInputModule } from '@angular/material/input';
 
 @NgModule({
   declarations: [
@@ -46,11 +49,13 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     ChatComponent,
     ProfileComponent,
     SearchComponent,
+    GroupsComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
+    MatInputModule,
     MatCardModule,
     AngularFirestoreModule,
     ServiceWorkerModule.register('firebase-messaging-sw.js', { enabled: environment.production }),
@@ -58,6 +63,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     Ng2SearchPipeModule,
     AngularFireAuthModule,
     EmojiModule,
+    MatFormFieldModule,
     NgxEmojiPickerModule,
     PickerModule,
     AngularFireMessagingModule,

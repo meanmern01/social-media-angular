@@ -38,3 +38,8 @@ form {
 .message-height {
   height: 42%;
 }
+.online {
+  left: 75%;
+  top: 93%;
+  padding: 0.4rem;
+}

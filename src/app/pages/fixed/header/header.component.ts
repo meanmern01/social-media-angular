@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit {
         this.db?.pushFileToStorage(this.image)?.subscribe((response: any) => {
 
           this.db.addPost({ postData: { ...postContent, imageUrl: response } })
-          Notiflix.Notify.success('Post Uploaded Successfully');
+          Notiflix.Notify.success('Post Uploaded Successfully', { timeout: 3000 });
           this.router.navigate(['/home'])
         })
         flag = 1;
@@ -110,5 +110,6 @@ export class HeaderComponent implements OnInit {
 
   logout() {
     this.auth.signOut()
+    this.router.navigate(['/home'])
   }
 }

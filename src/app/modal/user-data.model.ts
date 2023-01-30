@@ -44,5 +44,6 @@ export interface chat {
   reciverId: any;
   reciverName: any;
   message: any;
+  id: any;
   uid: string;
 }

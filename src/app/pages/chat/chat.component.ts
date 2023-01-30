@@ -31,6 +31,8 @@ export class ChatComponent implements OnInit {
   showUsers() {
     this.db.getAllUsers().subscribe((users: any) => {
       this.allUsers = users;
+      console.log(users);
+
       this.personal_Data = this.allUsers.filter((user: any) => user.uid === this.sender_Id)
       this.allUsers = this.allUsers.filter((user: any) => user.uid !== this.sender_Id)
     }
@@ -46,6 +48,10 @@ export class ChatComponent implements OnInit {
       this.db.getMessages(this.mergeId).subscribe((message: any) => {
         this.messages = message
         this.cd.detectChanges()
+
+        if (message[message.length - 1].reciverId === this.sender_Id) {
+          this.db.markMessageAsRead(message[message.length - 1])
+        }
       })
 
     }
@@ -69,7 +75,9 @@ export class ChatComponent implements OnInit {
         reciverName: this.reciver_Name,
         message: message,
         uid: this.mergeId,
-        timestemp: +new Date()
+        timestemp: +new Date(),
+        isRead: false,
+        id: ''
       }
       this.db.sendMessage(messages).subscribe(data => {
         this.db.getMessages(this.mergeId).subscribe((message: any) => {

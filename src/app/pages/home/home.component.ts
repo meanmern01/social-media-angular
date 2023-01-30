@@ -1,3 +1,4 @@
+import { PushNotificationsService } from './../../services/push-notification.service';
 import { AngularFireMessaging } from '@angular/fire/compat/messaging';
 import * as Notiflix from 'notiflix';
 import { post } from './../../modal/user-data.model';
@@ -9,6 +10,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { SwPush } from '@angular/service-worker';
 
 
 @Component({
@@ -25,19 +27,22 @@ export class HomeComponent implements OnInit {
   trendingPostsData!: any[];
   isAuthor!: boolean;
   i: any;
-  constructor(private db: DatabaseService, private util: UtilService, private messaging: AngularFireMessaging) { }
+  constructor(private db: DatabaseService, private util: UtilService, private messaging: AngularFireMessaging) {
+    // _notificationService.requestPermission()
+  }
   postsData!: post[]
   isLiked: boolean = false;
   token = localStorage.getItem('token') || '';
   sending: boolean = false;
   displayComm: any;
   displayCommBoolean: Boolean = false;
+
   resouceData: any[] = []
   ngOnInit(): void {
     this.getPosts()
     this.getUserData()
     this.trendingPosts()
-    this.getResources()
+    // this.getResources()
   }
   getUserData() {
     if (this.token) {
@@ -89,12 +94,12 @@ export class HomeComponent implements OnInit {
   comment(event: any, postId: string, i: number) {
     if (this.util.isLogin()) {
       if (event >= 0) {
-        Notiflix.Notify.failure("Please Enter Some Content to Comment")
+        Notiflix.Notify.failure("Please Enter Some Content to Comment", { timeout: 3000 })
       } else {
         //   // this.error = ""
         this.sending = true;
         this.db.addComment({ id: this.token, comment: event, postId }).subscribe((res: any) => {
-          Notiflix.Notify.info("Comment Added Successfully !!!")
+          Notiflix.Notify.info("Comment Added Successfully !!!", { timeout: 3000 })
         })
       }
       setTimeout(() => {
@@ -130,17 +135,19 @@ export class HomeComponent implements OnInit {
     }
   }
   follow(postAuthorId: any) {
-    this.db.follow(postAuthorId, this.token).subscribe((res: any) => {
-    })
+    if (this.util.isLogin()) {
+      this.db.follow(postAuthorId, this.token).subscribe((res: any) => {
+      })
+    }
   }
   unfollow(postAuthorId: any) {
     this.db.unfollow(postAuthorId, this.token).subscribe((res: any) => {
     })
   }
 
-  getResources() {
-    this.db.getNews().subscribe((res: any) => {
-      this.resouceData = res.value;
-    })
-  }
+  // getResources() {
+  //   this.db.getNews().subscribe((res: any) => {
+  //     this.resouceData = res.value;
+  //   })
+  // }
 }

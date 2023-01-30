@@ -6,20 +6,35 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item list-group-item-action d-flex align-items-center" *ngFor="let user of allUsers"
           (click)="showMessages(user)">
-          <img
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
-            class="rounded-circle me-2" *ngIf="!user?.profileImage" width="50" height="50" alt="">
-          <img src="{{user?.profileImage}}" *ngIf="user?.profileImage" width="50" height="50"
-            class="rounded-circle me-2" alt="Profile picture">
+          <div class="position-relative">
+            <img
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAAMFBMVEXi4uImJiadnZ2SkpLZ2dlsbGxdXV15eXnGxsaoqKiysrKGhoZNTU3Q0NA7Ozu8vLx+CZkfAAAAtElEQVRoge3T2Q6DIBCF4Tkim0t9/7etS22TWg2a3pj834WTcCKDgGYAAAAAAAC4qVbV+Kyj5PtPLc8L1F7zJEHOPbr6XUvzIkFxmiTLmVWq1lqcF8lpfqVVY5bk1zoomEUNe/m5Jq91RaVxaxTWOo02y4J/539pYuHRhaP8QpPtdmQpH+UXmmwPNnTdcol28jOS8/Ku31zRccmN4n5+8jsmzffPNqidDiLv5QAAAAAAALilJ/frBu723vpKAAAAAElFTkSuQmCC"
+              class="rounded-circle me-2" *ngIf="!user?.profileImage" width="50" height="50" alt="">
+            <img src="{{user?.profileImage}}" *ngIf="user?.profileImage" width="50" height="50"
+              class="rounded-circle me-2 " alt="Profile picture">
+            <span *ngIf="user?.online"
+              class="position-absolute translate-middle bg-success online border rounded-circle">
+              <span class="visually-hidden">New alerts</span>
+            </span>
+            <span *ngIf="!user?.online"
+              class="position-absolute translate-middle bg-secondary online border rounded-circle">
+              <span class="visually-hidden">New alerts</span>
+            </span>
+          </div>
           <div class="w-100">
             <h4 class="m-0">{{user.name}}</h4>
             <p class="text-muted m-0">{{''}}</p>
+          </div>
+          <div class="btn btn-primary" *ngIf="">
+
           </div>
         </li>
       </ul>
     </div>
     <div class="col-md-8 px-0 message-height" *ngIf="isSelected">
       <div class="h-25 bg-light align-items-center d-flex p-3">
+        <button class="btn bg-transparent" (click)="isSelected = false;"><i
+            class="fa-solid fa-chevron-left"></i></button>
         <div class="img-fluid me-2">
           <img src="{{reciver_Profile}}" class="rounded-circle" alt="" width="50" height="50">
         </div>

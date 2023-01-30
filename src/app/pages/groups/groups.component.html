@@ -1,0 +1,61 @@
+<div class="container">
+  <div class="row">
+    <div class="d-flex justify-content-center">
+      <div (click)="createGroup = true;" class="btn btn-info">Create Group <i class="fa-solid fa-plus"></i></div>
+    </div>
+    <!-- Create Group -->
+    <div *ngIf="createGroup" class="mt-5">
+      <h2 class="text-center">Create Group</h2>
+      <form action="" class="d-flex flex-column col-6 mx-auto" (submit)="addGroup()" [formGroup]="newGroup">
+        <mat-form-field appearance="fill">
+          <mat-label>Group Name : </mat-label>
+          <input matInput type="text" placeholder="Group Name" formControlName="groupName">
+          <mat-error *ngIf="groupName?.errors?.['required']">Group Name is Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Group Description</mat-label>
+          <textarea matInput formControlName="groupDesc" placeholder="Group Description"></textarea>
+          <mat-error *ngIf="groupDesc?.errors?.['required']">Group Description is Required</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Group Limit</mat-label>
+          <input type="number" matInput formControlName="groupLength" placeholder="Group Total Members">
+          <mat-error *ngIf="groupLength?.errors?.['required']">Group Total Members is Required</mat-error>
+        </mat-form-field>
+        <div>
+          <h4>Group Profile Picture</h4>
+          <input #profile type="file" id="profile" (change)="getImage($event)" accept="image/*">
+        </div>
+        <div class="text-center mt-3">
+          <button class="btn btn-success" type="submit">Create Group</button>
+          <button class="btn btn-danger ms-2" (click)="newGroup.reset(); createGroup = false;">Cancle</button>
+        </div>
+      </form>
+    </div>
+    <!-- View Group -->
+    <div *ngIf="!createGroup">
+      <h2>All Groups</h2>
+      <ul class="list-group-flush list-unstyled">
+        <li *ngFor="let group of allGroups" class="text-light border-bottom py-2">
+          <a class="text-decoration-none text-light">
+            <div class="d-flex align-items-center justify-content-between">
+              <div class="d-flex">
+                <img src="{{group.profile_Image}}" alt="" width="40" height="40" class="rounded-circle">
+                <div class="d-flex ms-2 flex-column">
+                  <h3 class="ms-2">{{group.groupName}}</h3>
+                  <p class="">{{group.groupDesc}}</p>
+                </div>
+              </div>
+              <div *ngIf="!isAdmin(group)">
+                <button *ngIf="!checkJoined(group.members)" (click)="joinGroup(group.id)"
+                  class="btn btn-success">Join</button>
+                <button *ngIf="checkJoined(group.members)" (click)="joinGroup(group.id)"
+                  class="btn btn-danger">Leave</button>
+              </div>
+            </div>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

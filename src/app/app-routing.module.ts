@@ -8,6 +8,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './shared/auth.guard';
 import { ProfileComponent } from './pages/profile/profile.component';
+import { GroupsComponent } from './pages/groups/groups.component';
 
 const routes: Routes = [
   {
@@ -45,6 +46,11 @@ const routes: Routes = [
   {
     path: 'profile/:id',
     component: ProfileComponent,
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'communities',
+    component: GroupsComponent,
     canActivate: [AuthGuard]
   }
 ];

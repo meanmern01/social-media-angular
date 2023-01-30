@@ -251,7 +251,13 @@ export class DatabaseService {
 
   //send Message
   sendMessage(message: chat) {
-    return from(this.afs.collection('/chats').add(message))
+    message.id = this.afs.createId();
+    return from(this.afs.collection('/chats').doc(message.id).set(message))
+  }
+  markMessageAsRead(message: any) {
+    this.afs.collection('/chats').doc(message.id).update({
+      isRead: true
+    });
   }
   //get message
   getMessages(uid: any): Observable<any> {
@@ -259,7 +265,11 @@ export class DatabaseService {
 
     return new Observable((observer) => {
       this.subscription = query.onSnapshot((snapshot) => {
-        const messages = snapshot.docs.map(doc => doc.data());
+        const messages = snapshot.docs.map(doc => {
+          let data: any = doc.data();
+          data.id = doc.id;
+          return data;
+        });
         observer.next(messages);
       });
     });
@@ -296,7 +306,7 @@ export class DatabaseService {
       ).subscribe();
     })
   }
-
+  //profile upload
   pushProfileToStorage(file: any, id: any) {
     let fileObject = {
       file: file,
@@ -324,9 +334,53 @@ export class DatabaseService {
       ).subscribe();
     })
   }
+  //group profile image upload
+  pushGroupProfileToStorage(file: any, id: any) {
+    let fileObject = {
+      file: file,
+      name: id
+    };
+    this.basePath = 'group_profile'
 
-  getNews() {
-    const headers = new HttpHeaders({ 'X-RapidAPI-Key': 'a5187d0bbfmshd40c41bdd972b69p1c8cb0jsn5e51bf7ca41a' })
-    return from(this.https.get('https://bing-news-search1.p.rapidapi.com/news?count=4', { 'headers': headers }))
+    const filePath = `/${this.basePath}/${id}`;
+    const storageRef = this.fireStorage.ref(filePath);
+    const uploadTask = this.fireStorage.upload(filePath, fileObject.file);
+    return new Observable((observer) => {
+      uploadTask.snapshotChanges().pipe(
+        finalize(() => {
+          storageRef.getDownloadURL().subscribe((downloadURL: any) => {
+            // Emit the download URL and complete the observable
+            observer.next(downloadURL);
+            file.name = fileObject.name;
+            observer.complete();
+          });
+        }),
+        catchError((err: any) => {
+          return of(err);
+        })
+      ).subscribe();
+    })
   }
+  //add group to database
+  addGroup(data: any) {
+    let id = this.afs.createId()
+    data.id = id;
+    this.afs.collection('groups').doc(id).set(data)
+    return of({ id: data.id })
+  }
+  //update group details in database
+  updateGroupDetails(id: any, key: any, data: any) {
+    return from(this.afs.collection('groups').doc(id).update({ [key]: data }))
+  }
+  //get group details from database
+  getGroups() {
+    return from(this.afs.collection('groups').valueChanges())
+  }
+  joinGroup(gId: any, uId: any) {
+    return from(this.afs.collection('groups').doc(gId).update({ 'members': arrayUnion(uId) }))
+  }
+  // getNews() {
+  //   const headers = new HttpHeaders({ 'X-RapidAPI-Key': 'a5187d0bbfmshd40c41bdd972b69p1c8cb0jsn5e51bf7ca41a' })
+  //   return from(this.https.get('https://bing-news-search1.p.rapidapi.com/news?count=4', { 'headers': headers }))
+  // }
 }

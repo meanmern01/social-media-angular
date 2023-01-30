@@ -13,7 +13,7 @@ export class UtilService {
     if (localStorage.getItem('token')) {
       return true;
     } else {
-      Notiflix.Notify.failure("You must login to Access This Functionality")
+      Notiflix.Notify.failure("You must login to Access This Functionality", { timeout: 3000 })
       return false;
     }
   }

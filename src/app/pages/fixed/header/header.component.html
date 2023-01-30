@@ -18,7 +18,8 @@
 </nav>
 <div class="conatiner-fluid pt-4 pb-2 bg-success-subtle">
   <div class="row justify-content-evenly align-items-center">
-    <button type="button" class="btn btn-success w-auto mb-2 me-2" data-bs-toggle="modal" data-bs-target="#myModal">New
+    <button type="button" [disabled]="!isLogin()" class="btn btn-success w-auto mb-2 me-2" data-bs-toggle="modal"
+      data-bs-target="#myModal">New
       Post</button>
     <div id="myModal" class="modal fade" role="dialog">
       <div class="modal-dialog modal-dialog-centered">

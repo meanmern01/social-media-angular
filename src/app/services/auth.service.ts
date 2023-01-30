@@ -23,14 +23,14 @@ export class AuthService {
     return this.afAuth
       .createUserWithEmailAndPassword(user.email, user.password)
       .then((result) => {
-        Notiflix.Notify.success('You have been successfully registered!')
+        Notiflix.Notify.success('You have been successfully registered!', { timeout: 3000 })
         this.db.addUserData({ userData: { ...rest, uid: result?.user?.uid } }).subscribe((res: any) => {
         })
         this.router.navigate(['/login'])
       })
       .catch((error) => {
         window.alert(error.message);
-        Notiflix.Notify.failure('Somthing Went Wrong !!!!')
+        Notiflix.Notify.failure('Somthing Went Wrong !!!!', { timeout: 3000 })
       });
   }
 
@@ -38,7 +38,7 @@ export class AuthService {
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
-        Notiflix.Notify.success('Login Successfully')
+        Notiflix.Notify.success('Login Successfully', { timeout: 3000 })
 
         localStorage.setItem("token", result.user?.uid || '')
         setTimeout(() => {
@@ -58,19 +58,19 @@ export class AuthService {
           Notiflix.Notify.failure("Email or Password is wrong. Please try again", {
             closeButton: true,
             cssAnimationStyle: 'from-right',
-            timeout: 5000
+            timeout: 3000
           })
         } else if (error.message === 'Firebase: There is no user record corresponding to this identifier. The user may have been deleted. (auth/user-not-found).') {
           Notiflix.Notify.failure("Your Email Address is invalid. Please Sign up", {
             closeButton: true,
             cssAnimationStyle: 'from-right',
-            timeout: 5000
+            timeout: 3000
           })
         } else {
           Notiflix.Notify.failure("Something went wrong. Please try again after several minutes", {
             closeButton: true,
             cssAnimationStyle: 'from-right',
-            timeout: 5000
+            timeout: 3000
           })
         }
       }
@@ -110,7 +110,7 @@ export class AuthService {
           }
         })
         Notiflix.Notify.success("You have been successfully logged in !!", {
-          timeout: 2000
+          timeout: 3000
         })
         localStorage.setItem('token', result.user?.uid || '')
         this.router.navigate(['/home']);

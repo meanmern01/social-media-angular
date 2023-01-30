@@ -18,7 +18,7 @@ export class SidebarComponent implements OnInit {
     route.events.pipe(
       filter(event => event instanceof NavigationEnd)
     ).subscribe((event: any) => {
-      if (event.url === '/chat' || event.url === '/trending' || event.url === '/search' || event.url.includes('/profile')) {
+      if (event.url === '/chat' || event.url === '/trending' || event.url === '/search' || event.url.includes('/profile') || event.url == '/notification') {
         this.show = true;
       } else {
         this.show = false;
@@ -34,7 +34,6 @@ export class SidebarComponent implements OnInit {
     }
     document?.getElementById("body")?.setAttribute("data-bs-theme", this.light ? "light" : "dark");
     // this.checkRoute()
-    this.getResources()
   }
   sidebar() {
     window.addEventListener('DOMContentLoaded', event => {
@@ -68,13 +67,5 @@ export class SidebarComponent implements OnInit {
       }
       return false
     });
-  }
-  getResources() {
-    this.db.getNews().pipe(
-      take(4)
-    ).subscribe((res: any) => {
-      this.resourceData = res.value;
-
-    })
   }
 }
